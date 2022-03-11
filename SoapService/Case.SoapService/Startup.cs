@@ -28,7 +28,12 @@ namespace Case.SoapService
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();
+            app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+
             app.UseRouting();
+
+            app.UseAuthorization();
             app.UseSoapEndpoint<ICurrencyService>("/Service.asmx", new BasicHttpBinding(), SoapSerializer.XmlSerializer);
         }
     }
