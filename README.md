@@ -2,6 +2,10 @@
 
 ## Dashboard
 
+### Screenshot
+
+![plot](./Other/DashScreen1.png)
+
 ### How to run
 - CD to /systemintegration/Dashboard/Case.Dashboard
 - Open the /Properties/launchSettings.json, and add config values
