@@ -1,0 +1,70 @@
+﻿@page "/dashboard"
+@inject PowerMeasurementsService PowerMeasurementsService
+@inject ForecastService ForecastService
+
+@code {
+    private ForecastAggregateResponse weatherForecast;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Ensure this is only triggered on first load - not every time the view is rerendered
+            await LoadData();
+            Console.WriteLine("After render OK");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadData(string zone = "Jutland")
+    {
+        weatherForecast = null;
+        weatherForecast = await ForecastService.GetForecastAsync();
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+}
+
+<h1>Weather forecast</h1>
+
+@if (weatherForecast == null)
+{
+    <p>
+        Loading forecast...
+    </p>
+}
+else
+{
+    <p>
+        Location: @weatherForecast.LocationName
+    </p>
+    <p>
+        Fetch time: @weatherForecast.FetchDateTime
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@(nameof(ForecastResponse.Hour))</th>
+                <th>@(nameof(ForecastResponse.DegreesCelsius))</th>
+                <th>@(nameof(ForecastResponse.CloudCover))</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in weatherForecast.DataNext24Hours)
+            {
+                <tr>
+                    <td>
+                        @item.Hour
+                    </td>
+                    <td>
+                        @item.DegreesCelsius &deg;C
+                    </td>
+                    <td>
+                        @item.CloudCover
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

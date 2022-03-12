@@ -7,9 +7,9 @@ namespace Case.Services.Test
         [Fact]
         public void TryService()
         {
-            Environment.SetEnvironmentVariable("SoapReference.Forecast.AuthKey", "CHANGEME!");
+            Environment.SetEnvironmentVariable("ForecastService.AuthKey", "CHANGEME!");
             var service = new ForecastService();
-            service.GetForecast();
+            var result = service.GetForecastAsync().Result;
         }
     }
 }
