@@ -8,7 +8,7 @@ namespace Case.Services.Test
         public void TryService()
         {
             Environment.SetEnvironmentVariable("ForecastService.AuthKey", "CHANGEME!");
-            var service = new ForecastService();
+            var service = new WeatherService();
             var result = service.GetForecastAsync().Result;
         }
     }

@@ -12,7 +12,7 @@ namespace Case.Services.Test
             Environment.SetEnvironmentVariable("PowerMeasurementsService.Url", "ftp://CHANGEHOSTHERE/sometestdata.csv");
 
             var service = new PowerMeasurementsService();
-            service.GetMeasurements();
+            service.GetMeasurementsAsync();
         }
     }
 }

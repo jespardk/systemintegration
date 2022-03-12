@@ -1,0 +1,47 @@
+﻿@code {
+    [Parameter]
+    public ForecastAggregateResponse Forecast { get; set; }
+}
+
+<h1>Weather forecast</h1>
+
+@if (Forecast == null)
+{
+    <p>
+        Loading forecast...
+    </p>
+}
+else
+{
+    <p>
+        Location: @Forecast.LocationName
+    </p>
+    <p>
+        Fetch time: @Forecast.FetchDateTime
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@(nameof(ForecastResponse.Hour))</th>
+                <th>@(nameof(ForecastResponse.DegreesCelsius))</th>
+                <th>@(nameof(ForecastResponse.CloudCover))</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Forecast.DataNext24Hours)
+            {
+                <tr>
+                    <td>
+                        @item.Hour
+                    </td>
+                    <td>
+                        @item.DegreesCelsius &deg;C
+                    </td>
+                    <td>
+                        @item.CloudCover
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

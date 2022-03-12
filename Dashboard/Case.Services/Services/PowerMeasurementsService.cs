@@ -7,40 +7,50 @@ namespace Case.Services
 {
     public class PowerMeasurementsService
     {
-        public PowerProductionResponse GetMeasurements()
+        public async Task<PowerProductionResponse> GetMeasurementsAsync()
         {
-            var username = Environment.GetEnvironmentVariable("PowerMeasurementsService.Username");
-            var password = Environment.GetEnvironmentVariable("PowerMeasurementsService.Password");
-            var url = Environment.GetEnvironmentVariable("PowerMeasurementsService.Url");
-
-            if (!url.StartsWith("ftp://")) throw new ArgumentException("Needs ftp:// prefix");
-
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(url);
-            request.Method = WebRequestMethods.Ftp.DownloadFile;
-            request.Credentials = new NetworkCredential(username, password);
-            request.EnableSsl = true;
-
             var response = new PowerProductionResponse();
 
-            FtpWebResponse ftpResponse = (FtpWebResponse)request.GetResponse();
-
-            using (Stream responseStream = ftpResponse.GetResponseStream())
+            try
             {
-                StreamReader streamReader = new StreamReader(responseStream);
+                var username = Environment.GetEnvironmentVariable("PowerMeasurementsService.Username");
+                var password = Environment.GetEnvironmentVariable("PowerMeasurementsService.Password");
+                var url = Environment.GetEnvironmentVariable("PowerMeasurementsService.Url");
 
-                var csvData = CsvHandler.ConvertCsv<PowermeasurementCsvSchema>(streamReader);
+                if (!url.StartsWith("ftp://")) throw new ArgumentException("Needs ftp:// prefix");
 
-                Console.WriteLine($"Download Complete, status {ftpResponse.StatusDescription}");
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(url);
+                request.Method = WebRequestMethods.Ftp.DownloadFile;
+                request.Credentials = new NetworkCredential(username, password);
+                //request.EnableSsl = true;
 
-                streamReader.Close();
+                FtpWebResponse ftpResponse = (FtpWebResponse)await request.GetResponseAsync();
+
+                using (Stream responseStream = ftpResponse.GetResponseStream())
+                {
+                    StreamReader streamReader = new StreamReader(responseStream);
+
+                    var csvData = CsvHandler.ConvertCsv<PowermeasurementCsvSchema>(streamReader);
+
+                    //var value = streamReader.ReadToEnd();
+
+                    Console.WriteLine($"{nameof(PowerMeasurementsService)}: Read data from FTP resource, status: {ftpResponse.StatusDescription}");
+
+                    streamReader.Close();
+                }
+
+                ftpResponse.Close();
+
+                // TODO Convert CSV schema classes to actual output that can be used on the dashboard
+                // ....add to response before returning
+                response.Watts = 1231;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{nameof(PowerMeasurementsService)}: Read data from FTP resource threw exception: {ex.Message}");
             }
 
-            ftpResponse.Close();
-
-            // TODO Convert CSV schema classes to actual output that can be used on the dashboard
-            // ....add to response before returning
-
-            return new PowerProductionResponse();
+            return response;
         }
     }
 }

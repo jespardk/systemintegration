@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<PowerMeasurementsService>();
-builder.Services.AddSingleton<ForecastService>();
+builder.Services.AddSingleton<WeatherService>();
 
 var app = builder.Build();
 

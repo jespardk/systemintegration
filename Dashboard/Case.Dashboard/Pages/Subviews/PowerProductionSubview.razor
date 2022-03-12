@@ -1,0 +1,25 @@
+﻿@code {
+    [Parameter]
+    public PowerProductionResponse PowerProduction { get; set; }
+}
+
+<h1>Power production</h1>
+
+@if (PowerProduction == null)
+{
+    <p>
+        Loading production...
+    </p>
+}
+else if (PowerProduction.Watts == -1)
+{
+    <p>
+        Error fetching data.
+    </p>
+}
+else
+{
+    <p>
+        Production last hour in watts: @PowerProduction.Watts
+    </p>
+}

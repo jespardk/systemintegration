@@ -4,5 +4,10 @@
     {
         public DateTime DateTime { get; set; }
         public float Watts { get; set; }
+
+        public PowerProductionResponse()
+        {
+            Watts = -1;
+        }
     }
 }
