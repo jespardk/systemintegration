@@ -25,6 +25,7 @@ else
                 <th>@(nameof(ForecastResponse.Hour))</th>
                 <th>@(nameof(ForecastResponse.DegreesCelsius))</th>
                 <th>@(nameof(ForecastResponse.CloudCover))</th>
+                <th>@(nameof(ForecastResponse.WindSpeedMeterPrSecond))</th>
             </tr>
         </thead>
         <tbody>
@@ -39,6 +40,9 @@ else
                     </td>
                     <td>
                         @item.CloudCover
+                    </td>
+                    <td>
+                        @item.WindSpeedMeterPrSecond
                     </td>
                 </tr>
             }
