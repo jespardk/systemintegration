@@ -13,7 +13,7 @@ namespace Case.Services.Helpers
                 HasHeaderRecord = true,
                 Comment = '#',
                 AllowComments = true,
-                Delimiter = ","
+                Delimiter = ";"
             };
 
             //string value = reader.ReadToEnd();

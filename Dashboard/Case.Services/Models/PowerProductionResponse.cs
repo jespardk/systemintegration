@@ -4,6 +4,7 @@
     {
         public DateTime DateTime { get; set; }
         public float Watts { get; set; }
+        public bool IsFromCache { get; set; }
 
         public PowerProductionResponse()
         {

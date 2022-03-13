@@ -6,12 +6,11 @@ namespace Case.Services
 {
     public class WeatherService
     {
-        private MemoryCache _memoryCache = new MemoryCache("ForecastService.Cache");
         private const string _cacheKey = "ForecastService.ForecastCache";
 
         public async Task<ForecastAggregateResponse> GetForecastAsync()
         {
-            var cachedItem = _memoryCache.Get(_cacheKey) as ForecastAggregateResponse;
+            var cachedItem = CacheService.MemoryCache.Get(_cacheKey) as ForecastAggregateResponse;
             if (cachedItem != null)
             {
                 Console.WriteLine($"{nameof(WeatherService)}: Read data cached");
@@ -45,7 +44,7 @@ namespace Case.Services
             }
 
             // Cache result
-            _memoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(60));
+            CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(60));
             Console.WriteLine($"{nameof(WeatherService)}: Read data from SOAP resource");
 
             return response;
