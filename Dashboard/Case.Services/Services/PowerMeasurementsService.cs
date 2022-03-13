@@ -13,18 +13,7 @@ namespace Case.Services
 
             try
             {
-                var username = Environment.GetEnvironmentVariable("PowerMeasurementsService.Username");
-                var password = Environment.GetEnvironmentVariable("PowerMeasurementsService.Password");
-                var url = Environment.GetEnvironmentVariable("PowerMeasurementsService.Url");
-
-                if (!url.StartsWith("ftp://")) throw new ArgumentException("Needs ftp:// prefix");
-
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(url);
-                request.Method = WebRequestMethods.Ftp.DownloadFile;
-                request.Credentials = new NetworkCredential(username, password);
-                //request.EnableSsl = true;
-
-                FtpWebResponse ftpResponse = (FtpWebResponse)await request.GetResponseAsync();
+                FtpWebResponse ftpResponse = await GetFromFtpSource();
 
                 using (Stream responseStream = ftpResponse.GetResponseStream())
                 {
@@ -39,8 +28,6 @@ namespace Case.Services
                     streamReader.Close();
                 }
 
-                ftpResponse.Close();
-
                 // TODO Convert CSV schema classes to actual output that can be used on the dashboard
                 // ....add to response before returning
                 response.Watts = 1231;
@@ -51,6 +38,25 @@ namespace Case.Services
             }
 
             return response;
+        }
+
+        private static async Task<FtpWebResponse> GetFromFtpSource()
+        {
+            var username = Environment.GetEnvironmentVariable("PowerMeasurementsService.Username");
+            var password = Environment.GetEnvironmentVariable("PowerMeasurementsService.Password");
+            var url = Environment.GetEnvironmentVariable("PowerMeasurementsService.Url");
+
+            if (!url.StartsWith("ftp://")) throw new ArgumentException("Needs ftp:// prefix");
+
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(url);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+            request.Credentials = new NetworkCredential(username, password);
+            //request.EnableSsl = true;
+
+            FtpWebResponse ftpResponse = (FtpWebResponse)await request.GetResponseAsync();
+            ftpResponse.Close();
+
+            return ftpResponse;
         }
     }
 }

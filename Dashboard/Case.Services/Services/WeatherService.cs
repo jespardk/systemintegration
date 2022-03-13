@@ -44,7 +44,7 @@ namespace Case.Services
             }
 
             // Cache result
-            _memoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(20));
+            _memoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(60));
             Console.WriteLine($"{nameof(WeatherService)}: Read data from SOAP resource");
 
             return response;

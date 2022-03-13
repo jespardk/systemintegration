@@ -12,7 +12,7 @@
         {
             // Ensure this is only triggered on first load - not every time the view is rerendered
             await LoadData();
-            Console.WriteLine("After render OK");
+            Console.WriteLine("First render OK");
         }
 
         await base.OnAfterRenderAsync(firstRender);
