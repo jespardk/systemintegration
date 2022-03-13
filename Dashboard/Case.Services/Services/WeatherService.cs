@@ -32,11 +32,14 @@ namespace Case.Services
 
             foreach (var item in next24HourData)
             {
+                var windSpeedMS = (float)Math.Round((item.wspd.Value / 1.94384F), 1);
+
                 response.DataNext24Hours.Add(new ForecastResponse
                 {
                     Hour = item.datetimeStr.Hour,
                     CloudCover = item.cloudcover.Value,
-                    DegreesCelsius = item.temp.Value
+                    DegreesCelsius = item.temp.Value,
+                    WindSpeedMeterPrSecond = windSpeedMS,
                 });
             }
 
