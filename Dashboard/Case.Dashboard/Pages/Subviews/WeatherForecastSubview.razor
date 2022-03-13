@@ -13,13 +13,21 @@
 }
 else
 {
-    <p>
-        Location: @Forecast.LocationName
-    </p>
-    <p>
-        Fetch time: @Forecast.FetchDateTime
-    </p>
-    <table class="table">
+    <div class="card bg-light mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+            <p class="card-text">
+                <strong>Location:</strong> @Forecast.LocationName<br>
+                <strong>Fetch time:</strong> @Forecast.FetchDateTime
+                @if (@Forecast.IsFromCache)
+                {
+                    <br><em>Cached</em>
+                }
+            </p>
+
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>@(nameof(ForecastResponse.Hour))</th>

@@ -15,6 +15,7 @@ namespace Case.Services
             if (cachedItem != null)
             {
                 Console.WriteLine($"{nameof(WeatherService)}: Read data cached");
+                cachedItem.IsFromCache = true;
                 return cachedItem;
             }
 
