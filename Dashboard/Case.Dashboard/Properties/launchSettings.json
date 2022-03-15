@@ -22,7 +22,6 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ForecastService.AuthKey": "Jeger1studerende"
       }
     }
   }
