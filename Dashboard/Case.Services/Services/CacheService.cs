@@ -5,7 +5,6 @@ namespace Case.Services
     public class CacheService
     {
         private static MemoryCache _memoryCache;
-
         public static MemoryCache MemoryCache
         {
             get {
@@ -13,17 +12,13 @@ namespace Case.Services
 
                 return _memoryCache; 
             }
-            private set
-            {
-                _memoryCache = value;
-            }
         }
 
         public static void ClearAllCache() => Initialize();
 
         private static void Initialize()
         {
-            MemoryCache = new MemoryCache("Case.Services.SharedCache");
+            _memoryCache = new MemoryCache("Case.Services.SharedCache");
         }
     }
 }
