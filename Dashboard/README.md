@@ -14,6 +14,7 @@
    - Fill out the secrets in file.
 5. Run this command: `dotnet watch run`. 
    - This should start a browser window with the blazor Dashboard application.
+   - If it doesn't, try http://localhost:5000/dashboard/ instead
 
 
    <br>
