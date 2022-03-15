@@ -1,12 +1,22 @@
 ﻿using Case.Services.Models;
 using Case.Services.References.ForecastService;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Configuration;
 
 namespace Case.Services
 {
     public class WeatherService
     {
         private const string _cacheKey = "ForecastService.ForecastCache";
+        private IConfiguration _configuration;
+        private string _key;
+
+        public WeatherService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+
+            var configService = new ConfigurationService(_configuration);
+            _key = configService.GetConfigValue("ForecastService.AuthKey");
+        }
 
         public async Task<ForecastAggregateResponse> GetForecastAsync()
         {
@@ -18,9 +28,8 @@ namespace Case.Services
                 return cachedItem;
             }
 
-            var key = Environment.GetEnvironmentVariable("ForecastService.AuthKey");
             var client = new ForecastServiceClient();
-            GetForecastResponse result = await client.GetForecastAsync("Aarhus", key);
+            GetForecastResponse result = await client.GetForecastAsync("Aarhus", _key);
 
             var tomorrow = DateTime.Now.AddDays(1);
             var next24HourData = result.Body.GetForecastResult.location.values.Where(_ => _.datetimeStr < tomorrow);
@@ -44,7 +53,7 @@ namespace Case.Services
             }
 
             // Cache result
-            CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(60));
+            CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(240));
             Console.WriteLine($"{nameof(WeatherService)}: Read data from SOAP resource");
 
             return response;

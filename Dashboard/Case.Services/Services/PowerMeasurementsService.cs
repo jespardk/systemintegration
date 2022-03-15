@@ -1,6 +1,7 @@
 ﻿using Case.Services.Helpers;
 using Case.Services.Models;
 using Case.Services.Schema;
+using Microsoft.Extensions.Configuration;
 using System.Net;
 
 namespace Case.Services
@@ -8,6 +9,18 @@ namespace Case.Services
     public class PowerMeasurementsService
     {
         private const string _cacheKey = "PowerMeasurementsService.WattsCache";
+        private string? _username;
+        private string? _password;
+        private string? _url;
+
+        public PowerMeasurementsService(IConfiguration configuration)
+        {
+            var config = new ConfigurationService(configuration);
+
+            _username = config.GetConfigValue("PowerMeasurementsService.Username");
+            _password = config.GetConfigValue("PowerMeasurementsService.Password");
+            _url = config.GetConfigValue("PowerMeasurementsService.Url");
+        }
 
         public async Task<PowerProductionResponse> GetMeasurementsAsync()
         {
@@ -26,50 +39,44 @@ namespace Case.Services
                 var allfiles = ListAndSortFilenames();
 
                 FtpWebResponse ftpResponse = await GetFromFtpSource(allfiles.FirstOrDefault());
-
+                                
                 using (Stream responseStream = ftpResponse.GetResponseStream())
                 {
-                    StreamReader streamReader = new StreamReader(responseStream);
+                    using StreamReader streamReader = new StreamReader(responseStream);
 
-                    var csvData = CsvHandler.ConvertCsv<PowermeasurementCsvSchema>(streamReader);
+                    var csvData = CsvHandler.ConvertCsvV2<PowermeasurementCsvSchema>(streamReader.ReadToEnd());
+                    var selectedData = csvData?.OrderByDescending(_ => _.TIMESTAMP)?.FirstOrDefault();
 
-                    var value = streamReader.ReadToEnd();
+                    response.DateTime = selectedData.TIMESTAMP;
+                    response.Watts = selectedData.Current_Day_Energy;
 
                     Console.WriteLine($"{nameof(PowerMeasurementsService)}: Read data from FTP resource, status: {ftpResponse.StatusDescription}");
 
                     streamReader.Close();
+                    responseStream.Close();
                 }
 
                 ftpResponse.Close();
-
-                // TODO Convert CSV schema classes to actual output that can be used on the dashboard
-                // ....add to response before returning
-                response.Watts = 1231;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"{nameof(PowerMeasurementsService)}: Read data from FTP resource threw exception: {ex.Message}");
             }
 
-            //CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(120));
-            //Console.WriteLine($"{nameof(WeatherService)}: Read data from FTP resource");
+            CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(240));
+            Console.WriteLine($"{nameof(WeatherService)}: Read data from FTP resource");
 
             return response;
         }
 
-        private static async Task<FtpWebResponse> GetFromFtpSource(string filename)
+        private async Task<FtpWebResponse> GetFromFtpSource(string filename)
         {
-            var username = Environment.GetEnvironmentVariable("PowerMeasurementsService.Username");
-            var password = Environment.GetEnvironmentVariable("PowerMeasurementsService.Password");
-            var url = Environment.GetEnvironmentVariable("PowerMeasurementsService.Url");
+            if (!_url.StartsWith("ftp://")) throw new ArgumentException("Needs ftp:// prefix");
 
-            if (!url.StartsWith("ftp://")) throw new ArgumentException("Needs ftp:// prefix");
-
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(url + "/" + filename);
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(_url + "/" + filename);
             request.Method = WebRequestMethods.Ftp.DownloadFile;
-            request.Credentials = new NetworkCredential(username, password);
-            //request.EnableSsl = true;
-
+            request.Credentials = new NetworkCredential(_username, _password);
+            
             FtpWebResponse ftpResponse = (FtpWebResponse)await request.GetResponseAsync();
 
             return ftpResponse;
@@ -79,13 +86,9 @@ namespace Case.Services
         {
             try
             {
-                var username = Environment.GetEnvironmentVariable("PowerMeasurementsService.Username");
-                var password = Environment.GetEnvironmentVariable("PowerMeasurementsService.Password");
-                var url = Environment.GetEnvironmentVariable("PowerMeasurementsService.Url");
-
-                FtpWebRequest request = (FtpWebRequest) WebRequest.Create(url);
+                FtpWebRequest request = (FtpWebRequest) WebRequest.Create(_url);
                 request.Method = WebRequestMethods.Ftp.ListDirectory;
-                request.Credentials = new NetworkCredential(username, password);
+                request.Credentials = new NetworkCredential(_username, _password);
 
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
                 Stream responseStream = response.GetResponseStream();

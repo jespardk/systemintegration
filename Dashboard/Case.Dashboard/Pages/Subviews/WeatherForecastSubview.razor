@@ -3,7 +3,13 @@
     public ForecastAggregateResponse Forecast { get; set; }
 }
 
-<h1>Weather forecast</h1>
+<h1>
+    Weather forecast
+    @if (Forecast != null && Forecast.IsFromCache)
+    {
+        <em style="font-size: 30%; text-transform:uppercase; vertical-align: super; color: #3b64dd;">Cached</em>
+    }
+</h1>
 
 @if (Forecast == null)
 {
@@ -18,10 +24,7 @@ else
             <p class="card-text">
                 <strong>Location:</strong> @Forecast.LocationName<br>
                 <strong>Fetch time:</strong> @Forecast.FetchDateTime
-                @if (@Forecast.IsFromCache)
-                {
-                    <br><em>Cached</em>
-                }
+                <strong>Data source:</strong> SOAP Service<br>
             </p>
 
         </div>
