@@ -1,6 +1,7 @@
 ﻿@page "/dashboard"
 @inject PowerMeasurementsService PowerMeasurementsService
 @inject WeatherService WeatherService
+@inject CacheService CacheService
 
 @code {
     private ForecastAggregateResponse _weatherForecast;
@@ -27,6 +28,10 @@
         await InvokeAsync(() => StateHasChanged());
     }
 }
+
+<button type="button" class="btn btn-secondary" @onclick="CacheService.ClearAllCache">Clear cache</button>
+
+<br /><br />
 
 <PowerProductionSubview PowerProduction="_powerProduction" />
 

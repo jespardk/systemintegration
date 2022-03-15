@@ -4,6 +4,26 @@ namespace Case.Services
 {
     public class CacheService
     {
-        public static MemoryCache MemoryCache = new MemoryCache("Case.Services.SharedCache");
+        private static MemoryCache _memoryCache;
+
+        public static MemoryCache MemoryCache
+        {
+            get {
+                if (_memoryCache == null) Initialize();
+
+                return _memoryCache; 
+            }
+            private set
+            {
+                _memoryCache = value;
+            }
+        }
+
+        public static void ClearAllCache() => Initialize();
+
+        private static void Initialize()
+        {
+            MemoryCache = new MemoryCache("Case.Services.SharedCache");
+        }
     }
 }

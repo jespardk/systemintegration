@@ -63,7 +63,7 @@ namespace Case.Services
                 Console.WriteLine($"{nameof(PowerMeasurementsService)}: Read data from FTP resource threw exception: {ex.Message}");
             }
 
-            CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(240));
+            CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(120));
             Console.WriteLine($"{nameof(WeatherService)}: Read data from FTP resource");
 
             return response;
