@@ -1,10 +1,8 @@
-# systemintegrationcase
+# Dashboard
 
-## Dashboard
+![plot](./misc/DashScreen1.png)
 
-### Screenshot
-
-![plot](./Other/DashScreen1.png)
+<br>
 
 ## How to run
 
