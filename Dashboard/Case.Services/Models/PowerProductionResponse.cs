@@ -1,13 +1,12 @@
 ﻿namespace Case.Services.Models
 {
-    public class PowerProductionResponse
+    public class PowerProductionResponse : BaseResponse
     {
-        public DateTime DateTime { get; set; }
         public float Watts { get; set; }
-        public bool IsFromCache { get; set; }
 
         public PowerProductionResponse()
         {
+            DataSourceType = "FTP/CSV";
             Watts = -1;
         }
     }

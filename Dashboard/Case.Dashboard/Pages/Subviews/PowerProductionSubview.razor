@@ -1,23 +1,23 @@
 ﻿@code {
     [Parameter]
-    public PowerProductionResponse PowerProduction { get; set; }
+    public PowerProductionResponse Model { get; set; }
 }
 
 <h1>
     Solar power production
-    @if (PowerProduction != null && PowerProduction.IsFromCache)
+    @if (Model != null && Model.IsFromCache)
     {
         <em style="font-size: 30%; text-transform:uppercase; vertical-align: super; color: #3b64dd;">Cached</em>
     }
 </h1>
 
-@if (PowerProduction == null)
+@if (Model == null)
 {
     <p>
         Loading production...
     </p>
 }
-else if (PowerProduction.Watts == -1)
+else if (Model.Watts == -1)
 {
     <p>
         Error fetching data.
@@ -28,10 +28,10 @@ else
     <div class="card bg-light mb-3" style="max-width: 18rem;">
         <div class="card-body">
             <p class="card-text">
-                <strong>Produced:</strong> @PowerProduction.Watts watts<br>
-                <strong>Date:</strong> @PowerProduction.DateTime.ToShortDateString() <br>
-                <strong>Hour:</strong> @(PowerProduction.DateTime.Hour):00 - @(PowerProduction.DateTime.Hour):59<br>
-                <strong>Data source:</strong> FTP/CSV file<br>
+                <strong>Produced:</strong> @Model.Watts watts<br>
+                <strong>Date:</strong> @Model.DateTime.ToShortDateString() <br>
+                <strong>Hour:</strong> @(Model.DateTime.Hour):00 - @(Model.DateTime.Hour):59<br>
+                <strong>Data source:</strong> @Model.DataSourceType<br>
             </p>
 
         </div>

@@ -1,13 +1,12 @@
 ﻿namespace Case.Services.Models
 {
-    public class TemperatureReportAggregateResponse
+    public class TemperatureReportAggregateResponse : BaseResponse
     {
-        public DateTime DateTime { get; set; }
         public List<TemperatureReportResponse> Data { get; set; }
-        public bool IsFromCache { get; set; }
 
         public TemperatureReportAggregateResponse()
         {
+            DataSourceType = "SQL server";
             Data = new List<TemperatureReportResponse>();
         }
     }

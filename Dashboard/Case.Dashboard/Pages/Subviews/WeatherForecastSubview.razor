@@ -1,17 +1,17 @@
 ﻿@code {
     [Parameter]
-    public ForecastAggregateResponse Forecast { get; set; }
+    public ForecastAggregateResponse Model { get; set; }
 }
 
 <h1>
     Weather forecast
-    @if (Forecast != null && Forecast.IsFromCache)
+    @if (Model != null && Model.IsFromCache)
     {
         <em style="font-size: 30%; text-transform:uppercase; vertical-align: super; color: #3b64dd;">Cached</em>
     }
 </h1>
 
-@if (Forecast == null)
+@if (Model == null)
 {
     <p>
         Loading forecast...
@@ -22,9 +22,9 @@ else
     <div class="card bg-light mb-3" style="max-width: 18rem;">
         <div class="card-body">
             <p class="card-text">
-                <strong>Location:</strong> @Forecast.LocationName<br>
-                <strong>Fetch time:</strong> @Forecast.FetchDateTime
-                <strong>Data source:</strong> SOAP Service<br>
+                <strong>Location:</strong> @Model.LocationName<br>
+                <strong>Fetch time:</strong> @Model.DateTime
+                <strong>Data source:</strong> @Model.DataSourceType<br>
             </p>
 
         </div>
@@ -40,7 +40,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Forecast.Data)
+            @foreach (var item in Model.Data)
             {
                 <tr>
                     <td>
