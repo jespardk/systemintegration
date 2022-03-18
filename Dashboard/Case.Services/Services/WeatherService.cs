@@ -31,19 +31,19 @@ namespace Case.Services
             var client = new ForecastServiceClient();
             GetForecastResponse result = await client.GetForecastAsync("Aarhus", _key);
 
-            var tomorrow = DateTime.Now.AddDays(1);
-            var next24HourData = result.Body.GetForecastResult.location.values.Where(_ => _.datetimeStr < tomorrow);
+            var dateNowPlus12Hours = DateTime.Now.AddHours(12);
+            var relevantForecastData = result.Body.GetForecastResult.location.values.Where(_ => _.datetimeStr < dateNowPlus12Hours);
 
             var response = new ForecastAggregateResponse();
             response.FetchDateTime = DateTime.Now;
             response.LocationName = result.Body.GetForecastResult.location.name;
-            response.DataNext24Hours = new List<ForecastResponse>();
+            response.Data = new List<ForecastResponse>();
 
-            foreach (var item in next24HourData)
+            foreach (var item in relevantForecastData)
             {
                 var windSpeedMS = (float)Math.Round((item.wspd.Value / 1.94384F), 1);
 
-                response.DataNext24Hours.Add(new ForecastResponse
+                response.Data.Add(new ForecastResponse
                 {
                     Hour = item.datetimeStr.Hour,
                     CloudCover = item.cloudcover.Value,

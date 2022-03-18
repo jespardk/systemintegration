@@ -2,10 +2,12 @@
 @inject PowerMeasurementsService PowerMeasurementsService
 @inject WeatherService WeatherService
 @inject CacheService CacheService
+@inject TemperatureReportingService TemperatureReportingService
 
 @code {
     private ForecastAggregateResponse _weatherForecast;
     private PowerProductionResponse _powerProduction;
+    private TemperatureReportAggregateResponse _temperatureReport;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -26,14 +28,17 @@
 
         _powerProduction = await PowerMeasurementsService.GetMeasurementsAsync();
         await InvokeAsync(() => StateHasChanged());
+
+        _temperatureReport = await TemperatureReportingService.GetTemperatureRecent();
+        await InvokeAsync(() => StateHasChanged());
     }
 }
 
-<button type="button" class="btn btn-secondary" @onclick="CacheService.ClearAllCache">Clear cache</button>
-
-<br /><br />
-
 <PowerProductionSubview PowerProduction="_powerProduction" />
+
+<br />
+
+<TemperatureReportSubview Model="_temperatureReport" />
 
 <br />
 

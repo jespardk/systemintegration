@@ -20,6 +20,7 @@ namespace Case.Dashboard
             services.AddSingleton<PowerMeasurementsService>();
             services.AddSingleton<WeatherService>();
             services.AddSingleton<CacheService>();
+            services.AddSingleton<TemperatureReportingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@inject CacheService CacheService
 
-<PageTitle>Power tool</PageTitle>
+<PageTitle>Power monitoring</PageTitle>
 
 <div class="page">
     <div class="sidebar">
@@ -9,6 +10,10 @@
 
     <main>
         <div class="top-row px-4">
+            <button type="button" class="btn btn-secondary" @onclick="CacheService.ClearAllCache">Clear cache</button>
+
+            &nbsp;&nbsp;
+
             Version 1.0.0
         </div>
 
