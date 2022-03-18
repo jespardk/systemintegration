@@ -27,14 +27,15 @@ namespace Case.Services
             }
 
             var response = new TemperatureReportAggregateResponse();
+            response.DataSourceType = "SQL server";
             response.DateTime = DateTime.Now;
 
-            //Db
             try
             {
                 var collectedData = new List<TemperatureReportResponse>();
 
                 using var connection = new SqlConnection(_connectionString);
+
                 connection.Open();
 
                 String sql = "SELECT TOP(10) [dato],[tidspunkt],[grader] FROM [dbo].[Temperatur] order by [dato] desc";

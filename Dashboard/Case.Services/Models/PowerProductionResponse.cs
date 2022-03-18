@@ -6,7 +6,6 @@
 
         public PowerProductionResponse()
         {
-            DataSourceType = "FTP/CSV";
             Watts = -1;
         }
     }

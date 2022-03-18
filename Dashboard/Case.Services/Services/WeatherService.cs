@@ -35,6 +35,7 @@ namespace Case.Services
             var relevantForecastData = result.Body.GetForecastResult.location.values.Where(_ => _.datetimeStr < dateNowPlus12Hours);
 
             var response = new ForecastAggregateResponse();
+            response.DataSourceType = "SOAP service";
             response.DateTime = DateTime.Now;
             response.LocationName = result.Body.GetForecastResult.location.name;
             response.Data = new List<ForecastResponse>();

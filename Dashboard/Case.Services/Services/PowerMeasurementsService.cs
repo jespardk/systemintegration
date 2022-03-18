@@ -25,6 +25,7 @@ namespace Case.Services
         public async Task<PowerProductionResponse> GetMeasurementsAsync()
         {
             var response = new PowerProductionResponse();
+            response.DataSourceType = "FTP/CSV";
 
             try
             {

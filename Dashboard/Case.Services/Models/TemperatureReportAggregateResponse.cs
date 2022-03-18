@@ -6,7 +6,6 @@
 
         public TemperatureReportAggregateResponse()
         {
-            DataSourceType = "SQL server";
             Data = new List<TemperatureReportResponse>();
         }
     }
