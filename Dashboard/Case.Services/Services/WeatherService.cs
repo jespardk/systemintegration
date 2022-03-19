@@ -28,7 +28,7 @@ namespace Case.Services
             var client = new ForecastServiceClient();
             GetForecastResponse result = await client.GetForecastAsync("Aarhus", _key);
 
-            var dateNowPlus12Hours = DateTime.Now.AddHours(12);
+            var dateNowPlus12Hours = DateTime.Now.AddHours(9);
             var relevantForecastData = result.Body.GetForecastResult.location.values.Where(_ => _.datetimeStr < dateNowPlus12Hours);
 
             var response = new ForecastAggregateResponse();
