@@ -82,7 +82,7 @@ INTERVAL;TIMESTAMP;SERIAL;P_AC;E_DAY;T_WR;U_AC;U_AC_1;U_AC_2;U_AC_3;I_AC;F_AC;U_
         [Fact]
         public async Task CanDecodeCsv()
         {
-            var converted = CsvHandler.ConvertCsvV2<PowermeasurementCsvSchema>(CsvExample);
+            var converted = CsvConverter.Convert<PowermeasurementCsvSchema>(CsvExample);
         }
     }
 }

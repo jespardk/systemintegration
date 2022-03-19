@@ -39,14 +39,19 @@ namespace Case.Services
 
                 var allfiles = ListAndSortFilenames();
 
-                FtpWebResponse ftpResponse = await GetFromFtpSource(allfiles.FirstOrDefault());
-                                
+                // Select a subset based on date -- raw: "danfoss-211231170002"
+                var oneYearAgo = DateTime.Now.AddYears(-1).ToString("yyMMdd");
+                var selectedFile = allfiles.FirstOrDefault(x => x.Replace("danfoss-", "").Substring(0,6) == oneYearAgo);
+
+                FtpWebResponse ftpResponse = await GetFromFtpSource(selectedFile);
+
                 using (Stream responseStream = ftpResponse.GetResponseStream())
                 {
                     using StreamReader streamReader = new StreamReader(responseStream);
 
-                    var csvData = CsvHandler.ConvertCsvV2<PowermeasurementCsvSchema>(streamReader.ReadToEnd());
-                    var selectedData = csvData?.OrderByDescending(_ => _.TIMESTAMP)?.FirstOrDefault();
+                    var rawCsvSanitized = PowerMeasurementCsvSanitizer.Sanitize(streamReader.ReadToEnd());
+                    var csvData = CsvConverter.Convert<PowermeasurementCsvSchema>(rawCsvSanitized);
+                    var selectedData = csvData?.OrderByDescending(_ => _.TIMESTAMP).FirstOrDefault();
 
                     response.DateTime = selectedData.TIMESTAMP;
                     response.Watts = selectedData.Current_Day_Energy;

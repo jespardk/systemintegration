@@ -29,6 +29,7 @@ else
         <div class="card-body">
             <p class="card-text">
                 <strong>Produced:</strong> @Model.Watts watts<br>
+                <strong>Note:</strong> Due to missing data, we use one year old data, from current date<br>
                 <strong>Date:</strong> @Model.DateTime.ToShortDateString() <br>
                 <strong>Hour:</strong> @(Model.DateTime.Hour):00 - @(Model.DateTime.Hour):59<br>
                 <strong>Data source:</strong> @Model.DataSourceType<br>
