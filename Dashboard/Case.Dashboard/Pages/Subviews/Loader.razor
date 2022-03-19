@@ -1,0 +1,21 @@
+﻿@code {
+    [Parameter]
+    public string LoadingText { get; set; }
+}
+
+<div class="card bg-light mb-3" style="max-width: 18rem;">
+    <div class="card-body">
+        <p class="card-text">
+            <strong>
+                @if (string.IsNullOrEmpty(LoadingText))
+                {
+                    @: Loading...
+                }
+                else
+                {
+                    @LoadingText
+                }
+            </strong>
+        </p>
+    </div>
+</div>

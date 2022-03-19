@@ -13,18 +13,16 @@
 
 @if (Model == null)
 {
-    <p>
-        Loading forecast...
-    </p>
+    <Loader />
 }
 else
 {
-    <div class="card bg-light mb-3" style="max-width: 18rem;">
+    <div class="card bg-light mb-3">
         <div class="card-body">
             <p class="card-text">
                 <strong>Location:</strong> @Model.LocationName<br>
-                <strong>Fetch time:</strong> @Model.DateTime
-                <strong>Data source:</strong> @Model.DataSourceType<br>
+                <strong>Fetch time:</strong> @Model.DateTime <br>
+                <strong>Data source:</strong> @Model.DataSourceType
             </p>
 
         </div>

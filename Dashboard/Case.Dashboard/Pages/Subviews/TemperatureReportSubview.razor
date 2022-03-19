@@ -7,50 +7,48 @@
     Temperatures
     @if (Model != null && Model.IsFromCache)
     {
-        <em style="font-size: 30%; text-transform:uppercase; vertical-align: super; color: #3b64dd;">Cached</em>
+            <em style="font-size: 30%; text-transform:uppercase; vertical-align: super; color: #3b64dd;">Cached</em>
     }
 </h1>
 
 @if (Model == null)
 {
-    <p>
-        Loading data...
-    </p>
+        <Loader />
 }
 else
 {
-    <div class="card bg-light mb-3" style="max-width: 18rem;">
-        <div class="card-body">
-            <p class="card-text">
-                <strong>Fetch time:</strong> @Model.DateTime
-                <strong>Data source:</strong> @Model.DataSourceType<br>
-            </p>
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>Fetch time:</strong> @Model.DateTime <br>
+                    <strong>Data source:</strong> @Model.DataSourceType
+                </p>
+            </div>
         </div>
-    </div>
 
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Degrees (C)</th>
-            </tr>
-        </thead>
-        <tbody>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Degrees (C)</th>
+                </tr>
+            </thead>
+            <tbody>
             @foreach (var item in Model.Data)
             {
-                <tr>
-                    <td>
+                        <tr>
+                            <td>
                         @item.dato.ToShortDateString()
-                    </td>
-                    <td>
+                            </td>
+                            <td>
                         @item.tidspunkt
-                    </td>
-                    <td>
+                            </td>
+                            <td>
                         @item.grader
-                    </td>
-                </tr>
+                            </td>
+                        </tr>
             }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 }
