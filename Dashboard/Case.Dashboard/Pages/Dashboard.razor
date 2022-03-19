@@ -34,12 +34,18 @@
     }
 }
 
-<PowerProductionSubview Model="_powerProduction" />
-
-<br />
-
-<TemperatureReportSubview Model="_temperatureReport" />
-
-<br />
-
-<WeatherForecastSubview Model="_weatherForecast" />
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <PowerProductionSubview Model="_powerProduction" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <TemperatureReportSubview Model="_temperatureReport" />
+    </div>
+    <div class="col">
+      <WeatherForecastSubview Model="_weatherForecast" />
+    </div>
+  </div>
+</div>
