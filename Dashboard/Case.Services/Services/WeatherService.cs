@@ -7,14 +7,11 @@ namespace Case.Services
     public class WeatherService
     {
         private const string _cacheKey = "ForecastService.ForecastCache";
-        private IConfiguration _configuration;
         private string _key;
 
         public WeatherService(IConfiguration configuration)
         {
-            _configuration = configuration;
-
-            var configService = new ConfigurationService(_configuration);
+            var configService = new ConfigurationService(configuration);
             _key = configService.GetConfigValue("ForecastService.AuthKey");
         }
 

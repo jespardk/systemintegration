@@ -37,11 +37,8 @@ namespace Case.Services
                     return cachedItem;
                 }
 
-                var allfiles = ListAndSortFilenames();
-
-                // Select a subset based on date -- raw: "danfoss-211231170002"
-                var oneYearAgo = DateTime.Now.AddYears(-1).ToString("yyMMdd");
-                var selectedFile = allfiles.FirstOrDefault(x => x.Replace("danfoss-", "").Substring(0,6) == oneYearAgo);
+                var allfiles = GetSortedFileNamesForServer();
+                string selectedFile = PickFileFromOneYearAgo(allfiles);
 
                 FtpWebResponse ftpResponse = await GetFromFtpSource(selectedFile);
 
@@ -75,6 +72,13 @@ namespace Case.Services
             return response;
         }
 
+        private static string PickFileFromOneYearAgo(List<string> allfiles)
+        {
+            var oneYearAgo = DateTime.Now.AddYears(-1).ToString("yyMMdd");
+            var selectedFile = allfiles?.FirstOrDefault(x => x.Replace("danfoss-", "")?.Substring(0, 6) == oneYearAgo);
+            return selectedFile;
+        }
+
         private async Task<FtpWebResponse> GetFromFtpSource(string filename)
         {
             if (!_url.StartsWith("ftp://")) throw new ArgumentException("Needs ftp:// prefix");
@@ -88,7 +92,7 @@ namespace Case.Services
             return ftpResponse;
         }
 
-        private List<string> ListAndSortFilenames()
+        private List<string> GetSortedFileNamesForServer()
         {
             try
             {
