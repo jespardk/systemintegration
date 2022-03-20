@@ -5,9 +5,9 @@
 @inject TemperatureReportingService TemperatureReportingService
 
 @code {
-    private ForecastAggregateResponse _weatherForecast;
-    private PowerProductionResponse _powerProduction;
-    private TemperatureReportAggregateResponse _temperatureReport;
+    private ForecastAggregateResponse? _weatherForecast;
+    private PowerProductionResponse? _powerProduction;
+    private TemperatureReportAggregateResponse? _temperatureReport;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -29,7 +29,7 @@
         _powerProduction = await PowerMeasurementsService.GetMeasurementsAsync();
         await InvokeAsync(() => StateHasChanged());
 
-        _temperatureReport = await TemperatureReportingService.GetTemperatureRecent();
+        _temperatureReport = TemperatureReportingService.GetTemperatureRecent();
         await InvokeAsync(() => StateHasChanged());
     }
 }

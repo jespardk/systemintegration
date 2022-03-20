@@ -4,7 +4,7 @@ namespace Case.Services
 {
     public class ConfigurationService
     {
-        private IConfiguration _configuration = null;
+        private IConfiguration? _configuration = null;
 
         public ConfigurationService(IConfiguration configuration)
         {
@@ -14,7 +14,7 @@ namespace Case.Services
             }
         }
 
-        public string GetConfigValue(string key)
+        public string? GetConfigValue(string key)
         {
             if (_configuration != null)
             {

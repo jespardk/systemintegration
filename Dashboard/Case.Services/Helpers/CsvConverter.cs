@@ -7,7 +7,7 @@ namespace Case.Services.Helpers
 {
     public class CsvConverter
     {
-        public static List<T> Convert<T>(string input)
+        public static List<T>? Convert<T>(string input)
             where T : class, new()
         {
             try

@@ -4,13 +4,17 @@ namespace Case.Services
 {
     public class CacheService
     {
-        private static MemoryCache _memoryCache;
-        public static MemoryCache MemoryCache
+        private static MemoryCache? _memoryCache;
+        public static MemoryCache? MemoryCache
         {
-            get {
-                if (_memoryCache == null) Initialize();
+            get
+            {
+                if (_memoryCache == null)
+                {
+                    Initialize();
+                }
 
-                return _memoryCache; 
+                return _memoryCache;
             }
         }
 

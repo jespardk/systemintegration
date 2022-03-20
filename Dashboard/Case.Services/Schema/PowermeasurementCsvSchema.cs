@@ -6,7 +6,7 @@ namespace Case.Services.Schema
     {
         public int INTERVAL { get; set; }
         public DateTime TIMESTAMP { get; set; }
-        public string SERIAL { get; set; }
+        public string? SERIAL { get; set; }
         public int P_AC { get; set; }
         public double E_DAY { get; set; }
         public int T_WR { get; set; }

@@ -1,11 +1,5 @@
 ﻿using Case.Services.Helpers;
 using Case.Services.Schema;
-using CsvHelper;
-using CsvHelper.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
-using System.Globalization;
-using System.Text;
 using Xunit;
 
 namespace Case.Services.Test
@@ -80,7 +74,7 @@ INTERVAL;TIMESTAMP;SERIAL;P_AC;E_DAY;T_WR;U_AC;U_AC_1;U_AC_2;U_AC_3;I_AC;F_AC;U_
         }
 
         [Fact]
-        public async Task CanDecodeCsv()
+        public void CanDecodeCsv()
         {
             var converted = CsvConverter.Convert<PowermeasurementCsvSchema>(CsvExample);
         }

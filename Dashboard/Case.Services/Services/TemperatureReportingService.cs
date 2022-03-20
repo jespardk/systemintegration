@@ -16,12 +16,12 @@ namespace Case.Services
             _connectionString = configService.GetConfigValue("TemperatureReportingService.ConnectionString");
         }
 
-        public async Task<TemperatureReportAggregateResponse> GetTemperatureRecent()
+        public TemperatureReportAggregateResponse GetTemperatureRecent()
         {
-            var cachedItem = CacheService.MemoryCache.Get(_cacheKey) as TemperatureReportAggregateResponse;
+            var cachedItem = CacheService.MemoryCache?.Get(_cacheKey) as TemperatureReportAggregateResponse;
             if (cachedItem != null)
             {
-                Console.WriteLine($"{nameof(WeatherService)}: Read data cached");
+                Console.WriteLine($"{GetType().Name}: Read data cached");
                 cachedItem.IsFromCache = true;
                 return cachedItem;
             }
@@ -61,8 +61,8 @@ namespace Case.Services
             }
 
             // Cache result
-            CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(60));
-            Console.WriteLine($"{nameof(TemperatureReportingService)}: Read data from SQL source");
+            CacheService.MemoryCache?.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(60));
+            Console.WriteLine($"{GetType().Name}: Read data from SQL source");
 
             return response;
         }

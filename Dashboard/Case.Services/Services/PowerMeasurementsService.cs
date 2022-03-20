@@ -29,10 +29,9 @@ namespace Case.Services
 
             try
             {
-                var cachedItem = CacheService.MemoryCache.Get(_cacheKey) as PowerProductionResponse;
-                if (cachedItem != null)
+                if (CacheService.MemoryCache?.Get(_cacheKey) is PowerProductionResponse cachedItem)
                 {
-                    Console.WriteLine($"{nameof(WeatherService)}: Read data cached");
+                    Console.WriteLine($"{GetType().Name}: Read data cached");
                     cachedItem.IsFromCache = true;
                     return cachedItem;
                 }
@@ -66,13 +65,13 @@ namespace Case.Services
                 Console.WriteLine($"{nameof(PowerMeasurementsService)}: Read data from FTP resource threw exception: {ex.Message}");
             }
 
-            CacheService.MemoryCache.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(120));
-            Console.WriteLine($"{nameof(WeatherService)}: Read data from FTP resource");
+            CacheService.MemoryCache?.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(120));
+            Console.WriteLine($"{GetType().Name}: Read data from FTP resource");
 
             return response;
         }
 
-        private static string PickFileFromOneYearAgo(List<string> allfiles)
+        private static string? PickFileFromOneYearAgo(List<string> allfiles)
         {
             var oneYearAgo = DateTime.Now.AddYears(-1).ToString("yyMMdd");
             var selectedFile = allfiles?.FirstOrDefault(x => x.Replace("danfoss-", "")?.Substring(0, 6) == oneYearAgo);
@@ -96,7 +95,7 @@ namespace Case.Services
         {
             try
             {
-                FtpWebRequest request = (FtpWebRequest) WebRequest.Create(_url);
+                FtpWebRequest request = WebRequest.Create(_url) as FtpWebRequest;
                 request.Method = WebRequestMethods.Ftp.ListDirectory;
                 request.Credentials = new NetworkCredential(_username, _password);
 
