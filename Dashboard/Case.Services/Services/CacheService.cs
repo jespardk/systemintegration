@@ -23,6 +23,7 @@ namespace Case.Services
         private static void Initialize()
         {
             _memoryCache = new MemoryCache("Case.Services.SharedCache");
+            Console.WriteLine("Cache: All cleared");
         }
     }
 }
