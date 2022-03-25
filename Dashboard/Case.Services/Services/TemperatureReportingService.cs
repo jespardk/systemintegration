@@ -38,7 +38,10 @@ namespace Case.Services
 
                 connection.Open();
 
-                String sql = "SELECT TOP(10) [dato],[tidspunkt],[grader] FROM [dbo].[Temperatur] order by [dato] desc";
+                String sql = 
+                    "SELECT TOP(10) [dato],[tidspunkt],[grader] " +
+                    "FROM [dbo].[Temperatur] " +
+                    "ORDER BY [dato] DESC";
 
                 using SqlCommand command = new SqlCommand(sql, connection);
                 using SqlDataReader reader = command.ExecuteReader();
@@ -47,9 +50,9 @@ namespace Case.Services
                 {
                     var item = new TemperatureReportResponse
                     {
-                        dato = reader.GetDateTime(0),
-                        tidspunkt = reader.GetTimeSpan(1),
-                        grader = reader.GetDecimal(2)
+                        Date = reader.GetDateTime(0),
+                        TimeOfDay = reader.GetTimeSpan(1),
+                        DegreesCelcius = reader.GetDecimal(2)
                     };
 
                     response.Data.Add(item);
