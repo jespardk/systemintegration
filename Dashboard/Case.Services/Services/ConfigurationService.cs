@@ -6,7 +6,7 @@ namespace Case.Services
     {
         private IConfiguration? _configuration = null;
 
-        public ConfigurationService(IConfiguration configuration)
+        public ConfigurationService(IConfiguration? configuration)
         {
             if (configuration != null)
             {
