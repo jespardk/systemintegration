@@ -20,3 +20,15 @@
    <br>
 
    Note: Launching directly from within Visual Studio will not work.
+
+
+
+
+## How to setup Kafka using WSL2, so it's available for the Dashboard to use
+Windows: Ensure ports are open for Kafka. 
+  - Run the script in `devops/WslOpenPortsForKafkaService.ps1`
+WSL: Ensure Docker daemon is running
+  - Run: `sudo dockerd`
+WSL: Ensure Kafka broker is running
+  - Must have a docker-compose.yaml file present - see `devops/KafkaBroker/` -  and must have docker running.
+  - Run: `sudo docker-compose up`

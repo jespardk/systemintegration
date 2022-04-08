@@ -1,0 +1,46 @@
+﻿@page "/livedata"
+@inject KafkaService KafkaService
+
+@code {
+    private TemperatureReportAggregateResponse? _temperatureReport;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Ensure this is only triggered on first load - not every time the view is rerendered
+            await LoadData();
+            Console.WriteLine("First render OK");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadData()
+    {
+        // start listening for messages
+        //Task task = Task.Run(() => KafkaService.Consume("quickstart"));
+        //KafkaService.Consume("quickstart");
+
+        //await InvokeAsync(() => StateHasChanged());
+    }
+
+    private async Task ProduceSample()
+    {
+        await KafkaService.Produce("quickstart", "message from blazor");
+    }
+
+    private void GetMessages()
+    {
+        KafkaService.Consume("quickstart");
+    }
+}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+        <button type="button" class="btn btn-secondary" @onclick="ProduceSample">Produce a sample message</button>
+        <button type="button" class="btn btn-secondary" @onclick="GetMessages">Get messages</button>
+    </div>
+  </div>
+</div>

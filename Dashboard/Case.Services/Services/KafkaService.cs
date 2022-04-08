@@ -10,6 +10,7 @@ namespace Case.Services
         private const string _cacheKey = "KafkaProvider.CacheKey";
         private ProducerConfig _producerConfig;
         private ConsumerConfig _consumerConfig;
+        public delegate void NotifyOnNewMessage(); // delegate
 
         public KafkaService(IConfiguration? configuration)
         {
@@ -21,8 +22,8 @@ namespace Case.Services
             {
                 BootstrapServers = servers,
                 ClientId = Dns.GetHostName(),
-                MessageTimeoutMs = 5000,
-                SocketTimeoutMs = 5000
+                MessageTimeoutMs = 4000,
+                SocketTimeoutMs = 4000
             };
 
             _consumerConfig = new ConsumerConfig
@@ -30,7 +31,7 @@ namespace Case.Services
                 BootstrapServers = servers,
                 GroupId = groupId,
                 AutoOffsetReset = AutoOffsetReset.Earliest,
-                SocketTimeoutMs = 5000
+                SocketTimeoutMs = 4000
             };
         }
 
@@ -39,12 +40,18 @@ namespace Case.Services
             using (var producer = new ProducerBuilder<Null, string>(_producerConfig).Build())
             {
                 var produceResult = await producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
-                return produceResult.Status == PersistenceStatus.Persisted;
+
+                var wasPersisted = produceResult.Status == PersistenceStatus.Persisted;
+                Console.WriteLine("Persist OK for Kafka");
+
+                return wasPersisted;
             }
         }
 
         public void Consume(string topic)
         {
+            Console.WriteLine($"Starting consumer to listen...");
+
             CancellationTokenSource cts = new CancellationTokenSource();
             Console.CancelKeyPress += (_, e) => {
                 e.Cancel = true; // prevent the process from terminating.
@@ -60,8 +67,9 @@ namespace Case.Services
                     while (true)
                     {
                         var cr = consumer.Consume(cts.Token);
-                        totalCount += JObject.Parse(cr.Message.Value).Value<int>("count");
-                        Console.WriteLine($"Consumed record with key {cr.Message.Key} and value {cr.Message.Value}, and updated total count to {totalCount}");
+                        Console.WriteLine($"[Message receieved] {cr.Value}");
+                        //totalCount += JObject.Parse(cr.Message.Value).Value<int>("count");
+                        //Console.WriteLine($"Consumed record with key {cr.Message.Key} and value {cr.Message.Value}, and updated total count to {totalCount}");
                     }
                 }
                 catch (OperationCanceledException)
