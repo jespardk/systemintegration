@@ -25,15 +25,8 @@
         //await InvokeAsync(() => StateHasChanged());
     }
 
-    private async Task ProduceSample()
-    {
-        await KafkaService.Produce("quickstart", "message from blazor");
-    }
-
-    private void GetMessages()
-    {
-        KafkaService.Consume("quickstart");
-    }
+    private async Task ProduceSample() => await KafkaService.Produce("quickstart", $"message from blazor at {DateTime.Now}");
+    private void GetMessages() => KafkaService.Consume("quickstart");
 }
 
 <div class="container-fluid">
