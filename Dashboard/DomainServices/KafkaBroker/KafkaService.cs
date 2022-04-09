@@ -10,6 +10,10 @@ namespace DomainServices.KafkaBroker
         private const string _cacheKey = "KafkaProvider.CacheKey";
         private ProducerConfig _producerConfig;
         private ConsumerConfig _consumerConfig;
+
+        public event Action<string> MessageArrived;
+        
+        //public event EventHandler<string> MessageArrived;
         public delegate void NotifyOnNewMessage(); // delegate
 
         public KafkaService(IConfiguration? configuration)
@@ -48,29 +52,25 @@ namespace DomainServices.KafkaBroker
             }
         }
 
-        public void Consume(string topic)
+        public void BeginConsuming(string topic)
         {
             Console.WriteLine($"Starting consumer to listen...");
 
             CancellationTokenSource cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) =>
-            {
-                e.Cancel = true; // prevent the process from terminating.
-                cts.Cancel();
-            };
 
             using (var consumer = new ConsumerBuilder<string, string>(_consumerConfig).Build())
             {
                 consumer.Subscribe(topic);
-                var totalCount = 0;
+
+                Console.WriteLine($"Consumer ready");
+
                 try
                 {
                     while (true)
                     {
                         var cr = consumer.Consume(cts.Token);
                         Console.WriteLine($"[Message receieved] {cr.Value}");
-                        //totalCount += JObject.Parse(cr.Message.Value).Value<int>("count");
-                        //Console.WriteLine($"Consumed record with key {cr.Message.Key} and value {cr.Message.Value}, and updated total count to {totalCount}");
+                        MessageArrived(cr.Value);
                     }
                 }
                 catch (OperationCanceledException)

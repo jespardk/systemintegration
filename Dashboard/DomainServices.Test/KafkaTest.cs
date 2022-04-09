@@ -12,7 +12,7 @@ namespace DomainServices.Test
             Environment.SetEnvironmentVariable("KafkaProvider.GroupId", "GroupForJll");
             var service = new KafkaService(null);
             await service.Produce("quickstart", "some testing stuff");
-            service.Consume("quickstart");
+            service.BeginConsuming("quickstart");
         }
     }
 }

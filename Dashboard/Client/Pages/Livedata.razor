@@ -2,38 +2,67 @@
 @inject KafkaService KafkaService
 
 @code {
-    private TemperatureReportAggregateResponse? _temperatureReport;
+    private string queueName = "quickstart";
+    private string messageContent = "message from blazor";
+    private List<LiveViewItem> ArrivedMessages = new List<LiveViewItem>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             // Ensure this is only triggered on first load - not every time the view is rerendered
-            await LoadData();
+            await Initialize();
             Console.WriteLine("First render OK");
         }
 
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private async Task LoadData()
+    private async Task Initialize()
     {
         // start listening for messages
-        //Task task = Task.Run(() => KafkaService.Consume("quickstart"));
-        //KafkaService.Consume("quickstart");
+        Task task = Task.Run(() =>
+        {
+            KafkaService.MessageArrived += OnMessageArrive;
+            KafkaService.BeginConsuming(queueName);
+        });
 
-        //await InvokeAsync(() => StateHasChanged());
+        await InvokeAsync(() => StateHasChanged());
     }
 
-    private async Task ProduceSample() => await KafkaService.Produce("quickstart", $"message from blazor at {DateTime.Now}");
-    private void GetMessages() => KafkaService.Consume("quickstart");
+    private async Task ProduceSample()
+    {
+        await KafkaService.Produce(queueName, messageContent);
+    }
+
+    private void OnMessageArrive(string message)
+    {
+        ArrivedMessages.Add(new LiveViewItem { DateTime = DateTime.Now, Message = message });
+        ArrivedMessages = ArrivedMessages.OrderByDescending(x => x.DateTime).ToList();
+        InvokeAsync(() => StateHasChanged());
+    }
 }
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="col">
-        <button type="button" class="btn btn-secondary" @onclick="ProduceSample">Produce a sample message</button>
-        <button type="button" class="btn btn-secondary" @onclick="GetMessages">Get messages</button>
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-secondary" @onclick="ProduceSample">Produce a sample message</button>
+            <input name="theMessage" @bind="messageContent" />
+        </div>
     </div>
-  </div>
+
+    <br /><br />
+
+    <div class="row">
+        @foreach (var message in ArrivedMessages)
+        {
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        @message.DateTime - '@message.Message'
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
 </div>
