@@ -35,7 +35,7 @@
         await KafkaService.Produce(queueName, messageContent);
     }
 
-    private void StopConsuming()
+    private void StopConsumer()
     {
         KafkaService.StopConsuming();
     }
@@ -55,7 +55,7 @@
             <input name="theMessage" @bind="messageContent" />
         </div>
         <div class="col">
-            <button type="button" class="btn btn-secondary" @onclick="StopConsuming">Stop consuming</button>
+            <button type="button" class="btn btn-secondary" @onclick="StopConsumer">Stop consumer</button>
         </div>
     </div>
 

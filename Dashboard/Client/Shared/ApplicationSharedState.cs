@@ -1,6 +1,6 @@
 ﻿using Client.ViewModels;
 
-namespace Client.State
+namespace Client.Shared
 {
     public static class ApplicationSharedState
     {
