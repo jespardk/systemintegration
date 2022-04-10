@@ -10,6 +10,7 @@ namespace DomainServices.KafkaBroker
         private const string _cacheKey = "KafkaProvider.CacheKey";
         private ProducerConfig _producerConfig;
         private ConsumerConfig _consumerConfig;
+        private CancellationTokenSource _consumerCancellationToken;
 
         public event Action<string> MessageArrived;
         
@@ -37,6 +38,8 @@ namespace DomainServices.KafkaBroker
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 SocketTimeoutMs = 4000
             };
+
+            
         }
 
         public async Task<bool> Produce(string topic, string message)
@@ -55,8 +58,7 @@ namespace DomainServices.KafkaBroker
         public void BeginConsuming(string topic)
         {
             Console.WriteLine($"Starting consumer to listen...");
-
-            CancellationTokenSource cts = new CancellationTokenSource();
+            _consumerCancellationToken = new CancellationTokenSource();
 
             using (var consumer = new ConsumerBuilder<string, string>(_consumerConfig).Build())
             {
@@ -68,7 +70,7 @@ namespace DomainServices.KafkaBroker
                 {
                     while (true)
                     {
-                        var cr = consumer.Consume(cts.Token);
+                        var cr = consumer.Consume(_consumerCancellationToken.Token);
                         Console.WriteLine($"[Message receieved] {cr.Value}");
                         MessageArrived(cr.Value);
                     }
@@ -82,6 +84,12 @@ namespace DomainServices.KafkaBroker
                     consumer.Close();
                 }
             }
+        }
+
+        public void StopConsuming()
+        {
+            _consumerCancellationToken.Cancel();
+            Console.WriteLine($"Cancelled consumer");
         }
     }
 }

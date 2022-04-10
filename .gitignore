@@ -348,4 +348,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/Dashboard/Case.Dashboard/appsettings.Secrets.json
+appsettings.Secrets.json

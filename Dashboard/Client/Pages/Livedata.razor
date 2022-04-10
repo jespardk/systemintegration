@@ -35,6 +35,11 @@
         await KafkaService.Produce(queueName, messageContent);
     }
 
+    private void StopConsuming()
+    {
+        KafkaService.StopConsuming();
+    }
+
     private void OnMessageArrive(string message)
     {
         ArrivedMessages.Add(new LiveViewItem { DateTime = DateTime.Now, Message = message });
@@ -48,6 +53,9 @@
         <div class="col">
             <button type="button" class="btn btn-secondary" @onclick="ProduceSample">Produce a sample message</button>
             <input name="theMessage" @bind="messageContent" />
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-secondary" @onclick="StopConsuming">Stop consuming</button>
         </div>
     </div>
 
