@@ -77,11 +77,11 @@ namespace DomainServices.KafkaBroker
                 }
                 catch (OperationCanceledException)
                 {
-                    // Ctrl-C was pressed.
                 }
                 finally
                 {
                     consumer.Close();
+                    Console.WriteLine($"Consumer stopped.");
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace DomainServices.KafkaBroker
         public void StopConsuming()
         {
             _consumerCancellationToken.Cancel();
-            Console.WriteLine($"Cancelled consumer");
+            Console.WriteLine($"Cancelling consumer...");
         }
     }
 }
