@@ -20,8 +20,8 @@ namespace DomainServices.KafkaBroker
         public KafkaService(IConfiguration? configuration)
         {
             var configService = new ConfigurationService(configuration);
-            var servers = configService.GetConfigValue("KafkaProvider.BootstrapServers") ?? throw new ArgumentException("Config for KafkaProvider.BootstrapServers not found");
-            var groupId = configService.GetConfigValue("KafkaProvider.GroupId") ?? throw new ArgumentException("Config for KafkaProvider.GroupId not found");
+            var servers = configService.GetConfigValue("KafkaProvider.BootstrapServers");
+            var groupId = configService.GetConfigValue("KafkaProvider.GroupId");
 
             _producerConfig = new ProducerConfig
             {
@@ -38,8 +38,6 @@ namespace DomainServices.KafkaBroker
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 SocketTimeoutMs = 4000
             };
-
-            
         }
 
         public async Task<bool> Produce(string topic, string message)

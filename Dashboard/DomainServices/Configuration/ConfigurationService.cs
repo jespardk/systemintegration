@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 namespace DomainServices.Configuration
 {
@@ -16,16 +17,18 @@ namespace DomainServices.Configuration
 
         public string? GetConfigValue(string key)
         {
+            string? value;
+
             if (_configuration != null)
             {
-                var value = _configuration[key];
-                if (value != null)
-                {
-                    return value;
-                }
+                value = _configuration[key];
+                if (value != null) return value;
             }
 
-            return Environment.GetEnvironmentVariable(key);
+            value = Environment.GetEnvironmentVariable(key);
+            if (value != null) return value;
+
+            throw new ConfigurationErrorsException($"Config value for '{key}' not found, or is empty.");
         }
     }
 }
