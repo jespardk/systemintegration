@@ -5,19 +5,15 @@ using System.Net;
 
 namespace Domain.KafkaBroker
 {
-    public class KafkaService
+    public class KafkaBroker
     {
-        private const string _cacheKey = "KafkaProvider.CacheKey";
         private ProducerConfig _producerConfig;
         private ConsumerConfig _consumerConfig;
         private CancellationTokenSource _consumerCancellationToken;
 
         public event Action<string> MessageArrived;
 
-        //public event EventHandler<string> MessageArrived;
-        public delegate void NotifyOnNewMessage(); // delegate
-
-        public KafkaService(IConfiguration? configuration)
+        public KafkaBroker(IConfiguration? configuration)
         {
             var configService = new ConfigurationService(configuration);
             var servers = configService.GetConfigValue("KafkaProvider.BootstrapServers");

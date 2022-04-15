@@ -69,14 +69,14 @@ INTERVAL;TIMESTAMP;SERIAL;P_AC;E_DAY;T_WR;U_AC;U_AC_1;U_AC_2;U_AC_3;I_AC;F_AC;U_
             Environment.SetEnvironmentVariable("PowerMeasurementsService.Password", "");
             Environment.SetEnvironmentVariable("PowerMeasurementsService.Url", "");
 
-            var service = new PowerMeasurementsService(null);
+            var service = new PowerMeasurementRetriever(null);
             await service.GetMeasurementsAsync();
         }
 
         [Fact]
         public void CanDecodeCsv()
         {
-            var converted = CsvConverter.Convert<PowermeasurementCsvSchema>(CsvExample);
+            var converted = CsvConverter.Convert<PowerMeasurementCsvSchema>(CsvExample);
         }
     }
 }

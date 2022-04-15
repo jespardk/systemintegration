@@ -1,8 +1,8 @@
 ﻿@page "/dashboard"
-@inject PowerMeasurementsService PowerMeasurementsService
-@inject WeatherService WeatherService
+@inject PowerMeasurementRetriever PowerMeasurementsService
+@inject WeatherForecastRetriever WeatherService
 @inject CacheService CacheService
-@inject TemperatureReportingService TemperatureReportingService
+@inject TemperatureReporter TemperatureReportingService
 
 @code {
     private ForecastAggregateResponse? _weatherForecast;

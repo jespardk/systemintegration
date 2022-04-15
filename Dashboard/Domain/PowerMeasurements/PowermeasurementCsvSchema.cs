@@ -1,6 +1,6 @@
 ﻿namespace Domain.PowerMeasurements
 {
-    public class PowermeasurementCsvSchema
+    public class PowerMeasurementCsvSchema
     {
         public int INTERVAL { get; set; }
         public DateTime TIMESTAMP { get; set; }

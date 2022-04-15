@@ -5,12 +5,12 @@ using Domain.Caching;
 
 namespace Domain.WeatherForecast
 {
-    public class WeatherService
+    public class WeatherForecastRetriever
     {
         private const string _cacheKey = "ForecastService.ForecastCache";
         private string _key;
 
-        public WeatherService(IConfiguration? configuration)
+        public WeatherForecastRetriever(IConfiguration? configuration)
         {
             var configService = new ConfigurationService(configuration);
             _key = configService.GetConfigValue("ForecastService.AuthKey") ?? string.Empty;

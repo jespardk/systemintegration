@@ -21,11 +21,11 @@ namespace Client
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<PowerMeasurementsService>();
-            services.AddSingleton<WeatherService>();
+            services.AddSingleton<PowerMeasurementRetriever>();
+            services.AddSingleton<WeatherForecastRetriever>();
             services.AddSingleton<CacheService>();
-            services.AddSingleton<TemperatureReportingService>();
-            services.AddSingleton<KafkaService>();
+            services.AddSingleton<TemperatureReporter>();
+            services.AddSingleton<KafkaBroker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

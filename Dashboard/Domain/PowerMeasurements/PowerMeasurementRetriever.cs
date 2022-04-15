@@ -6,14 +6,14 @@ using Domain.Caching;
 
 namespace Domain.PowerMeasurements
 {
-    public class PowerMeasurementsService
+    public class PowerMeasurementRetriever
     {
         private const string _cacheKey = "PowerMeasurementsService.WattsCache";
         private string? _username;
         private string? _password;
         private string? _url;
 
-        public PowerMeasurementsService(IConfiguration configuration)
+        public PowerMeasurementRetriever(IConfiguration configuration)
         {
             var config = new ConfigurationService(configuration);
 
@@ -46,13 +46,13 @@ namespace Domain.PowerMeasurements
                     using StreamReader streamReader = new StreamReader(responseStream);
 
                     var rawCsvSanitized = PowerMeasurementCsvSanitizer.Sanitize(streamReader.ReadToEnd());
-                    var csvData = CsvConverter.Convert<PowermeasurementCsvSchema>(rawCsvSanitized);
+                    var csvData = CsvConverter.Convert<PowerMeasurementCsvSchema>(rawCsvSanitized);
                     var selectedData = csvData?.OrderByDescending(_ => _.TIMESTAMP).FirstOrDefault();
 
                     response.DateTime = selectedData.TIMESTAMP;
                     response.Watts = selectedData.Current_Day_Energy;
 
-                    Console.WriteLine($"{nameof(PowerMeasurementsService)}: Read data from FTP resource, status: {ftpResponse.StatusDescription}");
+                    Console.WriteLine($"{nameof(PowerMeasurementRetriever)}: Read data from FTP resource, status: {ftpResponse.StatusDescription}");
 
                     streamReader.Close();
                     responseStream.Close();
@@ -62,7 +62,7 @@ namespace Domain.PowerMeasurements
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{nameof(PowerMeasurementsService)}: Read data from FTP resource threw exception: {ex.Message}");
+                Console.WriteLine($"{nameof(PowerMeasurementRetriever)}: Read data from FTP resource threw exception: {ex.Message}");
             }
 
             CacheService.MemoryCache?.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(120));

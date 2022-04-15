@@ -10,7 +10,7 @@ namespace Domain.Test
         {
             Environment.SetEnvironmentVariable("KafkaProvider.BootstrapServers", "172.17.179.38:9092");
             Environment.SetEnvironmentVariable("KafkaProvider.GroupId", "GroupForJll");
-            var service = new KafkaService(null);
+            var service = new KafkaBroker.KafkaBroker(null);
             await service.Produce("quickstart", "some testing stuff");
             service.BeginConsuming("quickstart");
         }

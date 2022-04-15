@@ -5,12 +5,12 @@ using Domain.Caching;
 
 namespace Domain.TemperatureReporting
 {
-    public class TemperatureReportingService
+    public class TemperatureReporter
     {
         private const string _cacheKey = "TemperatureReportingService.Cache";
         private string _connectionString;
 
-        public TemperatureReportingService(IConfiguration? configuration)
+        public TemperatureReporter(IConfiguration? configuration)
         {
             var configService = new ConfigurationService(configuration);
             _connectionString = configService.GetConfigValue("TemperatureReportingService.ConnectionString");
