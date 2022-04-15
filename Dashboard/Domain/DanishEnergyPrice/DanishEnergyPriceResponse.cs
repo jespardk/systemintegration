@@ -6,11 +6,14 @@ namespace Domain.DanishEnergyPrice
     {
         public DanishEnergyPriceArea PriceArea { get; set; }
         public List<DanishEnergyPriceRecordResponse> Records { get; set; }
+        public List<DanishEnergyPriceRecordResponse> RecordsWithPriceData => Records.Where(_ => _.HasPriceData).ToList();
+
         public int HourSpan { get; set; }
     }
 
     public class DanishEnergyPriceRecordResponse
     {
+        public bool HasPriceData { get; set; }
         public DateTime HourDk { get; set; }
         public double? SpotPriceMegawattInDKK { get; set; }
         public double? SpotPriceMegawattInEUR { get; set; }

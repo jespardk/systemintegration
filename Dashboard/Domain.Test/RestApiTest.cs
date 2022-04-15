@@ -14,6 +14,7 @@ namespace Domain.Test
             var service = new DanishEnergyPriceRetriever(null);
 
             var prices = await service.GetDayPricesForPriceArea(DanishEnergyPriceArea.DK1, 72);
+            var withPriceData = prices.RecordsWithPriceData;
         }
     }
 }

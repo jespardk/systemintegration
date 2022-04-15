@@ -49,8 +49,7 @@ namespace Domain.DanishEnergyPrice
         private static DanishEnergyPriceRecordResponse MapToDto(Record x)
         {
             double? price = x.SpotPriceDKK != null ? (double)x.SpotPriceDKK : null;
-
-            return new DanishEnergyPriceRecordResponse
+            var dto = new DanishEnergyPriceRecordResponse
             {
                 HourDk = x.HourDK,
                 SpotPriceMegawattInDKK = price.HasValue ? Math.Round(price.Value, 3) : null,
@@ -58,6 +57,13 @@ namespace Domain.DanishEnergyPrice
                 SpotPriceMegawattInEUR = price.HasValue ? Math.Round(price.Value / 7.4377, 3) : null,
                 SpotPriceKilowattInEUR = price.HasValue ? Math.Round(price.Value / 1000 / 7.4377, 3) : null
             };
+
+            if (price.HasValue)
+            {
+                dto.HasPriceData = true;
+            }
+
+            return dto;
         }
     }
 }
