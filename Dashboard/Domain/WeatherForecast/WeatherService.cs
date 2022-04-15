@@ -1,6 +1,6 @@
 ﻿using Domain.Configuration;
 using Microsoft.Extensions.Configuration;
-using DomainServices.WeatherForecast.ServiceReference;
+using Domain.WeatherForecast.ServiceReference;
 using Domain.Caching;
 
 namespace Domain.WeatherForecast
