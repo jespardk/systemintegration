@@ -17,7 +17,7 @@ namespace DomainServices.PowerMeasurements
             _baseUrl = config.GetConfigValue("DanishEnergyPrice.BaseUrl");
         }
 
-        public async Task<DanishEnergyPriceResponse> GetDayPricesForPriceArea(string area, int hoursToCollect = 24)
+        public async Task<DanishEnergyPriceResponse> GetDayPricesForPriceArea(DanishEnergyPriceArea area, int hoursToCollect = 24)
         {
             var response = new DanishEnergyPriceResponse
             {
@@ -32,8 +32,9 @@ namespace DomainServices.PowerMeasurements
                 var httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(_baseUrl);
 
-                var segment = $"datastore_search_sql?sql=SELECT \"HourDK\", \"SpotPriceDKK\" from \"elspotprices\" WHERE \"PriceArea\" = '{area}' ORDER BY \"HourDK\" DESC LIMIT {hoursToCollect}";
-                var result = await httpClient.GetStringAsync(segment);
+                var urlSegment = $"datastore_search_sql?sql=";
+                var query = $"SELECT \"HourDK\", \"SpotPriceDKK\" from \"elspotprices\" WHERE \"PriceArea\" = '{area}' ORDER BY \"HourDK\" DESC LIMIT {hoursToCollect}";
+                var result = await httpClient.GetStringAsync(urlSegment + query);
                 var resultAsEnergiDataServiceDkResponse = JsonConvert.DeserializeObject<Rootobject>(result);
                 response.Records = resultAsEnergiDataServiceDkResponse.result.records.Select(x => MapToDto(x)).ToList();
             }
@@ -47,15 +48,15 @@ namespace DomainServices.PowerMeasurements
 
         private static DanishEnergyPriceRecordResponse MapToDto(Record x)
         {
-            double price = x.SpotPriceDKK != null ? (double)x.SpotPriceDKK : 0;
+            double? price = x.SpotPriceDKK != null ? (double)x.SpotPriceDKK : null;
 
             return new DanishEnergyPriceRecordResponse
             {
                 HourDk = x.HourDK,
-                SpotPriceMegawattInDKK = Math.Round(price, 3),
-                SpotPriceKilowattInDKK = price != 0 ? Math.Round((price / 1000), 3) : 0,
-                SpotPriceMegawattInEUR = price != 0 ? Math.Round((price / 7.4377), 3) : 0,
-                SpotPriceKilowattInEUR = price != 0 ? Math.Round(((price/1000) / 7.4377), 3) : 0
+                SpotPriceMegawattInDKK = price.HasValue ? Math.Round(price.Value, 3) : null,
+                SpotPriceKilowattInDKK = price.HasValue ? Math.Round((price.Value / 1000), 3) : null,
+                SpotPriceMegawattInEUR = price.HasValue ? Math.Round((price.Value / 7.4377), 3) : null,
+                SpotPriceKilowattInEUR = price.HasValue ? Math.Round(((price.Value/1000) / 7.4377), 3) : null
             };
         }
     }

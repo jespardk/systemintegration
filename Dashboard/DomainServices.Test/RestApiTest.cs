@@ -1,6 +1,7 @@
 ﻿using DomainServices.PowerMeasurements;
 using Common.Helpers;
 using Xunit;
+using DomainServices.DanishEnergyPrice;
 
 namespace DomainServices.Test
 {
@@ -13,7 +14,7 @@ namespace DomainServices.Test
 
             var service = new DanishEnergyPriceRetriever(null);
 
-            var response = await service.GetDayPricesForPriceArea("DK1", 48);
+            var prices = await service.GetDayPricesForPriceArea(DanishEnergyPriceArea.DK1, 72);
         }
     }
 }
