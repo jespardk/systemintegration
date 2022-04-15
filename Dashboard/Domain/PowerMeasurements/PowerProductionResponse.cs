@@ -1,6 +1,6 @@
 ﻿using Common.Models;
 
-namespace DomainServices.PowerMeasurements
+namespace Domain.PowerMeasurements
 {
     public class PowerProductionResponse : BaseResponse
     {

@@ -1,4 +1,4 @@
-﻿namespace DomainServices.TemperatureReporting
+﻿namespace Domain.TemperatureReporting
 {
     public class TemperatureReportResponse
     {

@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{9B25BC90-7053-42D3-A773-B9611A1D6D15}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainServices", "DomainServices\DomainServices.csproj", "{80BA5469-F005-4D35-83BE-72BDFED140CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{80BA5469-F005-4D35-83BE-72BDFED140CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainServices.Test", "DomainServices.Test\DomainServices.Test.csproj", "{A3D04D96-5ED4-4FF1-ADE0-8CF65DEC6AB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Test", "Domain.Test\Domain.Test.csproj", "{A3D04D96-5ED4-4FF1-ADE0-8CF65DEC6AB7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{7ED87B81-154E-4E13-A381-EAC60737EE0A}"
 EndProject

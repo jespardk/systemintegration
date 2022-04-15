@@ -1,7 +1,7 @@
-﻿using DomainServices.KafkaBroker;
+﻿using Domain.KafkaBroker;
 using Xunit;
 
-namespace DomainServices.Test
+namespace Domain.Test
 {
     public class KafkaTest
     {

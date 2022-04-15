@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Configuration;
 
-namespace DomainServices.Configuration
+namespace Domain.Configuration
 {
     public class ConfigurationService
     {

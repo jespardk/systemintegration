@@ -1,9 +1,9 @@
-﻿using DomainServices.Configuration;
+﻿using Domain.Configuration;
 using Microsoft.Extensions.Configuration;
-using DomainServices.Caching;
 using System.Data.SqlClient;
+using Domain.Caching;
 
-namespace DomainServices.TemperatureReporting
+namespace Domain.TemperatureReporting
 {
     public class TemperatureReportingService
     {

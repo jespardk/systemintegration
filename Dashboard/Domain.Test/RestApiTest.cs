@@ -1,9 +1,8 @@
-﻿using DomainServices.PowerMeasurements;
-using Common.Helpers;
+﻿
 using Xunit;
-using DomainServices.DanishEnergyPrice;
+using Domain.DanishEnergyPrice;
 
-namespace DomainServices.Test
+namespace Domain.Test
 {
     public class RestApiTest
     {

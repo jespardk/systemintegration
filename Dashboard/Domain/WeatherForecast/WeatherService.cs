@@ -1,9 +1,9 @@
-﻿using DomainServices.Configuration;
+﻿using Domain.Configuration;
 using Microsoft.Extensions.Configuration;
-using DomainServices.Caching;
 using DomainServices.WeatherForecast.ServiceReference;
+using Domain.Caching;
 
-namespace DomainServices.WeatherForecast
+namespace Domain.WeatherForecast
 {
     public class WeatherService
     {

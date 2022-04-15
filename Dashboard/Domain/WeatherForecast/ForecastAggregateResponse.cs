@@ -1,6 +1,6 @@
 ﻿using Common.Models;
 
-namespace DomainServices.WeatherForecast
+namespace Domain.WeatherForecast
 {
     public class ForecastAggregateResponse : BaseResponse
     {

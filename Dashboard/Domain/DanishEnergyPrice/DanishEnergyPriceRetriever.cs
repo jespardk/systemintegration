@@ -1,9 +1,9 @@
-﻿using DomainServices.Configuration;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using DomainServices.DanishEnergyPrice;
+using Domain.PowerMeasurements;
+using Domain.Configuration;
 
-namespace DomainServices.PowerMeasurements
+namespace Domain.DanishEnergyPrice
 {
     public class DanishEnergyPriceRetriever
     {
@@ -54,9 +54,9 @@ namespace DomainServices.PowerMeasurements
             {
                 HourDk = x.HourDK,
                 SpotPriceMegawattInDKK = price.HasValue ? Math.Round(price.Value, 3) : null,
-                SpotPriceKilowattInDKK = price.HasValue ? Math.Round((price.Value / 1000), 3) : null,
-                SpotPriceMegawattInEUR = price.HasValue ? Math.Round((price.Value / 7.4377), 3) : null,
-                SpotPriceKilowattInEUR = price.HasValue ? Math.Round(((price.Value/1000) / 7.4377), 3) : null
+                SpotPriceKilowattInDKK = price.HasValue ? Math.Round(price.Value / 1000, 3) : null,
+                SpotPriceMegawattInEUR = price.HasValue ? Math.Round(price.Value / 7.4377, 3) : null,
+                SpotPriceKilowattInEUR = price.HasValue ? Math.Round(price.Value / 1000 / 7.4377, 3) : null
             };
         }
     }

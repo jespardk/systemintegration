@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Caching;
 
-namespace DomainServices.Caching
+namespace Domain.Caching
 {
     public class CacheService
     {

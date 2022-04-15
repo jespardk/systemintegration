@@ -1,8 +1,8 @@
-﻿using DomainServices.Caching;
-using DomainServices.KafkaBroker;
-using DomainServices.PowerMeasurements;
-using DomainServices.TemperatureReporting;
-using DomainServices.WeatherForecast;
+﻿using Domain.Caching;
+using Domain.KafkaBroker;
+using Domain.PowerMeasurements;
+using Domain.TemperatureReporting;
+using Domain.WeatherForecast;
 
 namespace Client
 {

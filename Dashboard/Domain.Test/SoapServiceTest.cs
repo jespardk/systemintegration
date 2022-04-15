@@ -1,7 +1,7 @@
-﻿using DomainServices.WeatherForecast;
+﻿using Domain.WeatherForecast;
 using Xunit;
 
-namespace DomainServices.Test
+namespace Domain.Test
 {
     public class SoapServiceTest
     {

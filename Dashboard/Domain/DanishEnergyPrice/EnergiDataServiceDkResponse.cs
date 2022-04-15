@@ -1,4 +1,4 @@
-﻿namespace DomainServices.DanishEnergyPrice
+﻿namespace Domain.DanishEnergyPrice
 {
     public class Rootobject
     {

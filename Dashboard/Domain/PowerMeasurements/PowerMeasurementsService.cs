@@ -1,10 +1,10 @@
-﻿using DomainServices.Configuration;
+﻿using Domain.Configuration;
 using Common.Helpers;
 using Microsoft.Extensions.Configuration;
-using DomainServices.Caching;
 using System.Net;
+using Domain.Caching;
 
-namespace DomainServices.PowerMeasurements
+namespace Domain.PowerMeasurements
 {
     public class PowerMeasurementsService
     {

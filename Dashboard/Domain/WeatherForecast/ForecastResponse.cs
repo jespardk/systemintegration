@@ -1,4 +1,4 @@
-﻿namespace DomainServices.WeatherForecast
+﻿namespace Domain.WeatherForecast
 {
     public class ForecastResponse
     {

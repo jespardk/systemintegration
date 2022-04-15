@@ -1,6 +1,6 @@
 ﻿using Common.Models;
 
-namespace DomainServices.TemperatureReporting
+namespace Domain.TemperatureReporting
 {
     public class TemperatureReportAggregateResponse : BaseResponse
     {

@@ -1,8 +1,8 @@
-﻿using DomainServices.PowerMeasurements;
-using Common.Helpers;
+﻿using Common.Helpers;
 using Xunit;
+using Domain.PowerMeasurements;
 
-namespace DomainServices.Test
+namespace Domain.Test
 {
     public class FtpTest
     {

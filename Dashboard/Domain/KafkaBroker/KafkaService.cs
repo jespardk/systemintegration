@@ -1,9 +1,9 @@
-﻿using DomainServices.Configuration;
+﻿using Domain.Configuration;
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 
-namespace DomainServices.KafkaBroker
+namespace Domain.KafkaBroker
 {
     public class KafkaService
     {
@@ -13,7 +13,7 @@ namespace DomainServices.KafkaBroker
         private CancellationTokenSource _consumerCancellationToken;
 
         public event Action<string> MessageArrived;
-        
+
         //public event EventHandler<string> MessageArrived;
         public delegate void NotifyOnNewMessage(); // delegate
 
