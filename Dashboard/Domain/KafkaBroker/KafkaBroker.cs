@@ -15,9 +15,9 @@ namespace Domain.KafkaBroker
 
         public KafkaBroker(IConfiguration? configuration)
         {
-            var configService = new ConfigurationService(configuration);
-            var servers = configService.GetConfigValue("KafkaProvider.BootstrapServers");
-            var groupId = configService.GetConfigValue("KafkaProvider.GroupId");
+            var configurationRetriever = new ConfigurationRetriever(configuration);
+            var servers = configurationRetriever.GetConfigValue("KafkaProvider.BootstrapServers");
+            var groupId = configurationRetriever.GetConfigValue("KafkaProvider.GroupId");
 
             _producerConfig = new ProducerConfig
             {

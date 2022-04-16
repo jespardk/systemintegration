@@ -1,6 +1,6 @@
 ﻿using Common.Helpers;
 using Xunit;
-using Domain.PowerMeasurements;
+using Domain.PowerMeasurement;
 
 namespace Domain.Test
 {

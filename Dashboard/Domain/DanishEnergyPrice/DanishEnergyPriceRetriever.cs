@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Domain.PowerMeasurements;
+using Domain.PowerMeasurement;
 using Domain.Configuration;
 
 namespace Domain.DanishEnergyPrice
@@ -12,7 +12,7 @@ namespace Domain.DanishEnergyPrice
 
         public DanishEnergyPriceRetriever(IConfiguration configuration)
         {
-            var config = new ConfigurationService(configuration);
+            var config = new ConfigurationRetriever(configuration);
 
             _baseUrl = config.GetConfigValue("DanishEnergyPrice.BaseUrl");
         }

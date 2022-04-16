@@ -12,7 +12,7 @@ namespace Domain.WeatherForecast
 
         public WeatherForecastRetriever(IConfiguration? configuration)
         {
-            var configService = new ConfigurationService(configuration);
+            var configService = new ConfigurationRetriever(configuration);
             _key = configService.GetConfigValue("ForecastService.AuthKey") ?? string.Empty;
         }
 

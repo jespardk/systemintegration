@@ -1,4 +1,4 @@
-﻿namespace Domain.PowerMeasurements
+﻿namespace Domain.PowerMeasurement
 {
     public class PowerMeasurementCsvSanitizer
     {

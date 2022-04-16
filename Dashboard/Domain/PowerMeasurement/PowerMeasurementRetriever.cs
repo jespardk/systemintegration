@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net;
 using Domain.Caching;
 
-namespace Domain.PowerMeasurements
+namespace Domain.PowerMeasurement
 {
     public class PowerMeasurementRetriever
     {
@@ -15,7 +15,7 @@ namespace Domain.PowerMeasurements
 
         public PowerMeasurementRetriever(IConfiguration configuration)
         {
-            var config = new ConfigurationService(configuration);
+            var config = new ConfigurationRetriever(configuration);
 
             _username = config.GetConfigValue("PowerMeasurementsService.Username");
             _password = config.GetConfigValue("PowerMeasurementsService.Password");

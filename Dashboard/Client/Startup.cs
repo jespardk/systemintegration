@@ -1,6 +1,6 @@
 ﻿using Domain.Caching;
 using Domain.KafkaBroker;
-using Domain.PowerMeasurements;
+using Domain.PowerMeasurement;
 using Domain.TemperatureReporting;
 using Domain.WeatherForecast;
 

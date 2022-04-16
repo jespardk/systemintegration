@@ -12,7 +12,7 @@ namespace Domain.TemperatureReporting
 
         public TemperatureReporter(IConfiguration? configuration)
         {
-            var configService = new ConfigurationService(configuration);
+            var configService = new ConfigurationRetriever(configuration);
             _connectionString = configService.GetConfigValue("TemperatureReportingService.ConnectionString");
         }
 

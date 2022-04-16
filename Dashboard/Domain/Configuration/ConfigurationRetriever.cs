@@ -3,11 +3,11 @@ using System.Configuration;
 
 namespace Domain.Configuration
 {
-    public class ConfigurationService
+    public class ConfigurationRetriever
     {
         private IConfiguration? _configuration = null;
 
-        public ConfigurationService(IConfiguration? configuration)
+        public ConfigurationRetriever(IConfiguration? configuration)
         {
             if (configuration != null)
             {
