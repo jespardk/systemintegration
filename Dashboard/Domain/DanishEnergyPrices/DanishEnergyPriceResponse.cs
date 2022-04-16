@@ -1,6 +1,6 @@
 ﻿using Common.Models;
 
-namespace Domain.DanishEnergyPrice
+namespace Domain.DanishEnergyPrices
 {
     public class DanishEnergyPriceResponse : BaseResponse
     {

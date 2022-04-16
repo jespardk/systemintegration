@@ -1,6 +1,6 @@
 ﻿
 using Xunit;
-using Domain.DanishEnergyPrice;
+using Domain.DanishEnergyPrices;
 
 namespace Domain.Test
 {
@@ -13,7 +13,7 @@ namespace Domain.Test
 
             var service = new DanishEnergyPriceRetriever(null);
 
-            var prices = await service.GetDayPricesForPriceArea(DanishEnergyPriceArea.DK1, 72);
+            var prices = await service.GetDayPricesForPriceArea(DanishEnergyPriceArea.DK1, 96);
             var withPriceData = prices.RecordsWithPriceData;
         }
     }

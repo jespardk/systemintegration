@@ -3,11 +3,12 @@ using Newtonsoft.Json;
 using Domain.PowerMeasurement;
 using Domain.Configuration;
 
-namespace Domain.DanishEnergyPrice
+namespace Domain.DanishEnergyPrices
 {
     public class DanishEnergyPriceRetriever
     {
         private const string _cacheKey = "DanishEnergyPrice.PriceCache";
+        private const double CONVERSION_PRICE_DKK_TO_EUR = 7.4377;
         private string? _baseUrl;
 
         public DanishEnergyPriceRetriever(IConfiguration configuration)
@@ -48,14 +49,14 @@ namespace Domain.DanishEnergyPrice
 
         private static DanishEnergyPriceRecordResponse MapToDto(Record x)
         {
-            double? price = x.SpotPriceDKK != null ? (double)x.SpotPriceDKK : null;
+            double? price = x.SpotPriceDKK == null ? null : (double)x.SpotPriceDKK;
             var dto = new DanishEnergyPriceRecordResponse
             {
                 HourDk = x.HourDK,
                 SpotPriceMegawattInDKK = price.HasValue ? Math.Round(price.Value, 3) : null,
                 SpotPriceKilowattInDKK = price.HasValue ? Math.Round(price.Value / 1000, 3) : null,
-                SpotPriceMegawattInEUR = price.HasValue ? Math.Round(price.Value / 7.4377, 3) : null,
-                SpotPriceKilowattInEUR = price.HasValue ? Math.Round(price.Value / 1000 / 7.4377, 3) : null
+                SpotPriceMegawattInEUR = price.HasValue ? Math.Round(price.Value / DanishEnergyPriceRetriever.CONVERSION_PRICE_DKK_TO_EUR, 3) : null,
+                SpotPriceKilowattInEUR = price.HasValue ? Math.Round((price.Value / 1000) / CONVERSION_PRICE_DKK_TO_EUR, 3) : null
             };
 
             if (price.HasValue)
