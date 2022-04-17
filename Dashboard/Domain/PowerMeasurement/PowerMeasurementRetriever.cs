@@ -12,9 +12,11 @@ namespace Domain.PowerMeasurement
         private string? _username;
         private string? _password;
         private string? _url;
+        private ICacheService _cacheService;
 
-        public PowerMeasurementRetriever(IConfiguration configuration)
+        public PowerMeasurementRetriever(IConfiguration configuration, ICacheService cacheService)
         {
+            _cacheService = cacheService;
             var config = new ConfigurationRetriever(configuration);
 
             _username = config.GetConfigValue("PowerMeasurementsService.Username");
@@ -29,9 +31,9 @@ namespace Domain.PowerMeasurement
 
             try
             {
-                if (CacheService.MemoryCache?.Get(_cacheKey) is PowerProductionResponse cachedItem)
+                var cachedItem = _cacheService.Get<PowerProductionResponse>(_cacheKey);
+                if (cachedItem != null)
                 {
-                    Console.WriteLine($"{GetType().Name}: Read data cached");
                     cachedItem.IsFromCache = true;
                     return cachedItem;
                 }
@@ -65,7 +67,7 @@ namespace Domain.PowerMeasurement
                 Console.WriteLine($"{nameof(PowerMeasurementRetriever)}: Read data from FTP resource threw exception: {ex.Message}");
             }
 
-            CacheService.MemoryCache?.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(120));
+            _cacheService.Set(_cacheKey, response, 120);
             Console.WriteLine($"{GetType().Name}: Read data from FTP resource");
 
             return response;

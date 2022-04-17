@@ -8,20 +8,21 @@ namespace Domain.TemperatureReporting
     public class TemperatureReporter
     {
         private const string _cacheKey = "TemperatureReportingService.Cache";
+        private readonly ICacheService _cacheService;
         private string _connectionString;
 
-        public TemperatureReporter(IConfiguration? configuration)
+        public TemperatureReporter(IConfiguration? configuration, ICacheService cacheService)
         {
             var configService = new ConfigurationRetriever(configuration);
             _connectionString = configService.GetConfigValue("TemperatureReportingService.ConnectionString");
+            _cacheService = cacheService;
         }
 
         public TemperatureReportAggregateResponse GetTemperatureRecent()
         {
-            var cachedItem = CacheService.MemoryCache?.Get(_cacheKey) as TemperatureReportAggregateResponse;
+            var cachedItem = _cacheService.Get<TemperatureReportAggregateResponse>(_cacheKey);
             if (cachedItem != null)
             {
-                Console.WriteLine($"{GetType().Name}: Read data cached");
                 cachedItem.IsFromCache = true;
                 return cachedItem;
             }
@@ -64,7 +65,7 @@ namespace Domain.TemperatureReporting
             }
 
             // Cache result
-            CacheService.MemoryCache?.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(60));
+            _cacheService.Set(_cacheKey, response, 60);
             Console.WriteLine($"{GetType().Name}: Read data from SQL source");
 
             return response;

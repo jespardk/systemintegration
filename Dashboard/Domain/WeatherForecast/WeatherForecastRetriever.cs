@@ -8,20 +8,21 @@ namespace Domain.WeatherForecast
     public class WeatherForecastRetriever
     {
         private const string _cacheKey = "ForecastService.ForecastCache";
+        private readonly ICacheService _cacheService;
         private string _key;
 
-        public WeatherForecastRetriever(IConfiguration? configuration)
+        public WeatherForecastRetriever(IConfiguration? configuration, ICacheService cacheService)
         {
             var configService = new ConfigurationRetriever(configuration);
             _key = configService.GetConfigValue("ForecastService.AuthKey") ?? string.Empty;
+            _cacheService = cacheService;
         }
 
         public async Task<ForecastAggregateResponse> GetForecastAsync()
         {
-            var cachedItem = CacheService.MemoryCache?.Get(_cacheKey) as ForecastAggregateResponse;
+            var cachedItem = _cacheService.Get<ForecastAggregateResponse>(_cacheKey);
             if (cachedItem != null)
             {
-                Console.WriteLine($"{GetType().Name}: Read data cached");
                 cachedItem.IsFromCache = true;
                 return cachedItem;
             }
@@ -54,7 +55,7 @@ namespace Domain.WeatherForecast
             }
 
             // Cache result
-            CacheService.MemoryCache?.Set(_cacheKey, response, DateTimeOffset.Now.AddSeconds(120));
+            _cacheService.Set(_cacheKey, response, 120);
             Console.WriteLine($"{GetType().Name}: Read data from SOAP resource");
 
             return response;

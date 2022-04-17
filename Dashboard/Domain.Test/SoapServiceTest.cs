@@ -1,4 +1,5 @@
-﻿using Domain.WeatherForecast;
+﻿using Domain.Caching;
+using Domain.WeatherForecast;
 using Xunit;
 
 namespace Domain.Test
@@ -9,7 +10,9 @@ namespace Domain.Test
         public void TryService()
         {
             Environment.SetEnvironmentVariable("ForecastService.AuthKey", "CHANGEME!");
-            var service = new WeatherForecastRetriever(null);
+
+            var cacheService = new CacheService();
+            var service = new WeatherForecastRetriever(null, cacheService);
             var result = service.GetForecastAsync().Result;
         }
     }

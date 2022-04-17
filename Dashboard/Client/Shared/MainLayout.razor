@@ -1,5 +1,20 @@
 ﻿@inherits LayoutComponentBase
-@inject CacheService CacheService
+@inject ICacheService CacheService
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime
+
+@code {
+    async Task ClearCacheAndRefresh()
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            CacheService.ClearAllCache();
+            var currentLocation = NavigationManager.Uri;
+            NavigationManager.NavigateTo(currentLocation, forceLoad: true);
+        }
+    }
+}
 
 <PageTitle>Power monitoring</PageTitle>
 
@@ -10,7 +25,7 @@
 
     <main>
         <div class="top-row px-4">
-            <button type="button" class="btn btn-secondary" @onclick="CacheService.ClearAllCache">Clear cache</button>
+            <button type="button" class="btn btn-secondary" @onclick="ClearCacheAndRefresh">Clear cache</button>
 
             &nbsp;&nbsp;
 
