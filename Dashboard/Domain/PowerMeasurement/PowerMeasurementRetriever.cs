@@ -14,14 +14,13 @@ namespace Domain.PowerMeasurement
         private string? _url;
         private ICacheService _cacheService;
 
-        public PowerMeasurementRetriever(IConfiguration configuration, ICacheService cacheService)
+        public PowerMeasurementRetriever(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
         {
             _cacheService = cacheService;
-            var config = new ConfigurationRetriever(configuration);
-
-            _username = config.GetConfigValue("PowerMeasurementsService.Username");
-            _password = config.GetConfigValue("PowerMeasurementsService.Password");
-            _url = config.GetConfigValue("PowerMeasurementsService.Url");
+            
+            _username = configurationRetriever.Get("PowerMeasurementsService.Username");
+            _password = configurationRetriever.Get("PowerMeasurementsService.Password");
+            _url = configurationRetriever.Get("PowerMeasurementsService.Url");
         }
 
         public async Task<PowerProductionResponse> GetMeasurementsAsync()

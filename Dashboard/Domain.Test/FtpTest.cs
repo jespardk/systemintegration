@@ -2,6 +2,7 @@
 using Xunit;
 using Domain.PowerMeasurement;
 using Domain.Caching;
+using Domain.Configuration;
 
 namespace Domain.Test
 {
@@ -70,8 +71,9 @@ INTERVAL;TIMESTAMP;SERIAL;P_AC;E_DAY;T_WR;U_AC;U_AC_1;U_AC_2;U_AC_3;I_AC;F_AC;U_
             Environment.SetEnvironmentVariable("PowerMeasurementsService.Password", "");
             Environment.SetEnvironmentVariable("PowerMeasurementsService.Url", "");
 
+            var configurationRetriever = new ConfigurationRetriever(null);
             var cacheService = new CacheService();
-            var service = new PowerMeasurementRetriever(null, cacheService);
+            var service = new PowerMeasurementRetriever(configurationRetriever, cacheService);
             await service.GetMeasurementsAsync();
         }
 

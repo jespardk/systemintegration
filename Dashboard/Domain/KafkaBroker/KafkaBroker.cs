@@ -13,11 +13,10 @@ namespace Domain.KafkaBroker
 
         public event Action<string> MessageArrived;
 
-        public KafkaBroker(IConfiguration? configuration)
+        public KafkaBroker(IConfigurationRetriever configurationRetriever)
         {
-            var configurationRetriever = new ConfigurationRetriever(configuration);
-            var servers = configurationRetriever.GetConfigValue("KafkaProvider.BootstrapServers");
-            var groupId = configurationRetriever.GetConfigValue("KafkaProvider.GroupId");
+            var servers = configurationRetriever.Get("KafkaProvider.BootstrapServers");
+            var groupId = configurationRetriever.Get("KafkaProvider.GroupId");
 
             _producerConfig = new ProducerConfig
             {

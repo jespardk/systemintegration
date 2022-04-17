@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Domain.Configuration
 {
-    public class ConfigurationRetriever
+    public class ConfigurationRetriever : IConfigurationRetriever
     {
         private IConfiguration? _configuration = null;
 
@@ -15,7 +15,7 @@ namespace Domain.Configuration
             }
         }
 
-        public string? GetConfigValue(string key)
+        public string? Get(string key)
         {
             string? value;
 
@@ -28,7 +28,7 @@ namespace Domain.Configuration
             value = Environment.GetEnvironmentVariable(key);
             if (value != null) return value;
 
-            throw new ConfigurationErrorsException($"Config value for '{key}' not found, or is empty.");
+            throw new ConfigurationErrorsException($"Config value for '{key}' not found, or is empty. Ensure it exists in appsettings.Secrets.json or other config file.");
         }
     }
 }

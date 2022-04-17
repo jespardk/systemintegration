@@ -11,11 +11,9 @@ namespace Domain.DanishEnergyPrices
         private const double CONVERSION_PRICE_DKK_TO_EUR = 7.4377;
         private string? _baseUrl;
 
-        public DanishEnergyPriceRetriever(IConfiguration configuration)
+        public DanishEnergyPriceRetriever(IConfigurationRetriever configurationRetriever)
         {
-            var config = new ConfigurationRetriever(configuration);
-
-            _baseUrl = config.GetConfigValue("DanishEnergyPrice.BaseUrl");
+            _baseUrl = configurationRetriever.Get("DanishEnergyPrice.BaseUrl");
         }
 
         public async Task<DanishEnergyPriceResponse> GetDayPricesForPriceArea(DanishEnergyPriceArea area, int hoursToCollect = 24)

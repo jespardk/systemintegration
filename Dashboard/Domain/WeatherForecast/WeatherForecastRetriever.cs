@@ -1,5 +1,4 @@
 ﻿using Domain.Configuration;
-using Microsoft.Extensions.Configuration;
 using Domain.WeatherForecast.ServiceReference;
 using Domain.Caching;
 
@@ -11,10 +10,9 @@ namespace Domain.WeatherForecast
         private readonly ICacheService _cacheService;
         private string _key;
 
-        public WeatherForecastRetriever(IConfiguration? configuration, ICacheService cacheService)
+        public WeatherForecastRetriever(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
         {
-            var configService = new ConfigurationRetriever(configuration);
-            _key = configService.GetConfigValue("ForecastService.AuthKey") ?? string.Empty;
+            _key = configurationRetriever.Get("ForecastService.AuthKey") ?? string.Empty;
             _cacheService = cacheService;
         }
 

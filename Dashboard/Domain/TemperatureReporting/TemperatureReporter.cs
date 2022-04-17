@@ -1,5 +1,4 @@
 ﻿using Domain.Configuration;
-using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using Domain.Caching;
 
@@ -11,10 +10,9 @@ namespace Domain.TemperatureReporting
         private readonly ICacheService _cacheService;
         private string _connectionString;
 
-        public TemperatureReporter(IConfiguration? configuration, ICacheService cacheService)
+        public TemperatureReporter(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
         {
-            var configService = new ConfigurationRetriever(configuration);
-            _connectionString = configService.GetConfigValue("TemperatureReportingService.ConnectionString");
+            _connectionString = configurationRetriever.Get("TemperatureReportingService.ConnectionString");
             _cacheService = cacheService;
         }
 
