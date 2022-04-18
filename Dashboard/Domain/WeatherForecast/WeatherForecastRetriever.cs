@@ -1,6 +1,8 @@
 ﻿using Domain.Configuration;
 using Domain.WeatherForecast.ServiceReference;
 using Domain.Caching;
+using Polly;
+using Polly.Retry;
 
 namespace Domain.WeatherForecast
 {
@@ -10,12 +12,15 @@ namespace Domain.WeatherForecast
         private const string CacheKey = "WeatherForecast.ForecastCache";
         private string? _key;
         private string? _location = "Kolding";
+        private AsyncRetryPolicy _retryPolicy = null;
 
         public WeatherForecastRetriever(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
         {
             _key = configurationRetriever.Get("WeatherForecast.AuthKey");
             _location = configurationRetriever.Get("WeatherForecast.Location");
             _cacheService = cacheService;
+
+            SetupRetryingPolicy();
         }
 
         public async Task<ForecastAggregateResponse> GetForecastAsync()
@@ -34,7 +39,12 @@ namespace Domain.WeatherForecast
 
                 var client = new ForecastServiceClient();
                 client.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(5);
-                GetForecastResponse result = await client.GetForecastAsync(_location, _key);
+                GetForecastResponse result = null;
+
+                await _retryPolicy.ExecuteAsync(async () =>
+                {
+                    result = await client.GetForecastAsync(_location, _key);
+                });
 
                 var dateNowPlus12Hours = DateTime.Now.AddHours(9);
                 var relevantForecastData = result.Body.GetForecastResult.location.values.Where(_ => _.datetimeStr < dateNowPlus12Hours);
@@ -70,6 +80,20 @@ namespace Domain.WeatherForecast
             }
 
             return response;
+        }
+
+        private void SetupRetryingPolicy()
+        {
+            var retrySleepDuration = TimeSpan.FromSeconds(3);
+
+            _retryPolicy = Policy.Handle<Exception>()
+                .WaitAndRetryAsync(
+                   retryCount: 3,
+                   sleepDurationProvider: (x) => retrySleepDuration,
+                   onRetry: (exception, sleepDuration, attemptNumber, context) =>
+                   {
+                       Console.WriteLine($"{GetType().Name} Error during service communication. Retrying in {retrySleepDuration}. {attemptNumber} / {3}");
+                   });
         }
     }
 }
