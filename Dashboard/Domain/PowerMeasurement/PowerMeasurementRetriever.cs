@@ -52,6 +52,7 @@ namespace Domain.PowerMeasurement
 
                     response.DateTime = selectedData.TIMESTAMP;
                     response.Watts = selectedData.Current_Day_Energy;
+                    response.RequestSuccessful = true;
 
                     Console.WriteLine($"{nameof(PowerMeasurementRetriever)}: Read data from FTP resource, status: {ftpResponse.StatusDescription}");
 
@@ -60,14 +61,14 @@ namespace Domain.PowerMeasurement
                 }
 
                 ftpResponse.Close();
+
+                _cacheService.Set(_cacheKey, response, 120);
+                Console.WriteLine($"{GetType().Name}: Read data from FTP resource");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"{nameof(PowerMeasurementRetriever)}: Read data from FTP resource threw exception: {ex.Message}");
             }
-
-            _cacheService.Set(_cacheKey, response, 120);
-            Console.WriteLine($"{GetType().Name}: Read data from FTP resource");
 
             return response;
         }
