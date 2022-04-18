@@ -39,7 +39,7 @@ namespace Domain.DanishEnergyPrices
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{nameof(PowerMeasurementRetriever)}: Read data from WebApi resource threw exception: {ex.Message}");
+                Console.WriteLine($"{GetType().Name}: Read data from WebApi resource threw exception: {ex.Message}");
             }
 
             return response;

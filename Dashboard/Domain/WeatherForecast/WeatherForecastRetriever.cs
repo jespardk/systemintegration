@@ -26,7 +26,7 @@ namespace Domain.WeatherForecast
             }
 
             var client = new ForecastServiceClient();
-            GetForecastResponse result = await client.GetForecastAsync("Aarhus", _key);
+            GetForecastResponse result = await client.GetForecastAsync("Kolding", _key);
 
             var dateNowPlus12Hours = DateTime.Now.AddHours(9);
             var relevantForecastData = result.Body.GetForecastResult.location.values.Where(_ => _.datetimeStr < dateNowPlus12Hours);

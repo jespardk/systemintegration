@@ -4,7 +4,7 @@
 @code {
     private string queueName = "quickstart";
     private string messageContent = "message from blazor";
-    private List<LiveViewItem> ArrivedMessages = new List<LiveViewItem>();
+    private List<LiveViewItemViewModel> ArrivedMessages = new List<LiveViewItemViewModel>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -42,7 +42,7 @@
 
     private void OnMessageArrive(string message)
     {
-        ArrivedMessages.Add(new LiveViewItem { DateTime = DateTime.Now, Message = message });
+        ArrivedMessages.Add(new LiveViewItemViewModel { DateTime = DateTime.Now, Message = message });
         ArrivedMessages = ArrivedMessages.OrderByDescending(x => x.DateTime).ToList();
         InvokeAsync(() => StateHasChanged());
     }
