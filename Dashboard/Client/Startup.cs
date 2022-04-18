@@ -4,6 +4,7 @@ using Domain.KafkaBroker;
 using Domain.PowerMeasurement;
 using Domain.TemperatureReporting;
 using Domain.WeatherForecast;
+using Infrastructure.Caching;
 
 namespace Client
 {
@@ -22,7 +23,7 @@ namespace Client
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<ICacheService, CacheService>();
+            services.AddSingleton<ICacheService, InMemoryCache>();
             services.AddSingleton<IConfigurationRetriever, ConfigurationRetriever>();
             services.AddTransient<PowerMeasurementRetriever>();
             services.AddTransient<WeatherForecastRetriever>();

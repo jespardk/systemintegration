@@ -1,8 +1,9 @@
 ﻿using System.Runtime.Caching;
+using Domain.Caching;
 
-namespace Domain.Caching
+namespace Infrastructure.Caching
 {
-    public class CacheService : ICacheService
+    public class InMemoryCache : ICacheService
     {
         private const int DefaultCacheTimeInSeconds = 120;
         private const string ApplicationCacheName = "DashboardApplication.SharedCache";
