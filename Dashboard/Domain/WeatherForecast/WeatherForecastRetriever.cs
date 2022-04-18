@@ -1,8 +1,7 @@
 ﻿using Domain.Configuration;
 using Domain.WeatherForecast.ServiceReference;
 using Domain.Caching;
-using Polly;
-using Polly.Retry;
+using Common.ResiliencyPolicies;
 
 namespace Domain.WeatherForecast
 {
@@ -13,7 +12,6 @@ namespace Domain.WeatherForecast
         private const string CacheKey = "WeatherForecast.ForecastCache";
         private string? _key;
         private string? _location = "Kolding";
-        private AsyncRetryPolicy _retryPolicy = null;
 
         public WeatherForecastRetriever(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
         {
@@ -23,8 +21,6 @@ namespace Domain.WeatherForecast
 
             _client = new ForecastServiceClient();
             _client.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(5);
-
-            SetupRetryingPolicy();
         }
 
         public async Task<ForecastAggregateResponse> GetForecastAsync()
@@ -43,7 +39,8 @@ namespace Domain.WeatherForecast
 
                 GetForecastResponse result = null;
 
-                await _retryPolicy.ExecuteAsync(async () =>
+                var retryPolicy = GenericRetryingPolicy.Get(GetType().Name, 3);
+                await retryPolicy.ExecuteAsync(async () => 
                 {
                     result = await _client.GetForecastAsync(_location, _key);
                 });
@@ -82,20 +79,6 @@ namespace Domain.WeatherForecast
                 DegreesCelsius = item.temp.HasValue ? item.temp.Value : 0,
                 WindSpeedMeterPrSecond = windSpeedMS,
             };
-        }
-
-        private void SetupRetryingPolicy()
-        {
-            var retrySleepDuration = TimeSpan.FromSeconds(3);
-
-            _retryPolicy = Policy.Handle<Exception>()
-                .WaitAndRetryAsync(
-                   retryCount: 3,
-                   sleepDurationProvider: (x) => retrySleepDuration,
-                   onRetry: (exception, sleepDuration, attemptNumber, context) =>
-                   {
-                       Console.WriteLine($"{GetType().Name} Error during service communication. Retrying in {retrySleepDuration}. {attemptNumber} / {3}");
-                   });
         }
     }
 }
