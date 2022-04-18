@@ -1,6 +1,6 @@
-﻿using Domain.Caching;
-using Domain.Configuration;
+﻿using Domain.Configuration;
 using Domain.WeatherForecast;
+using Infrastructure.Caching;
 using Xunit;
 
 namespace Domain.Test
@@ -13,7 +13,7 @@ namespace Domain.Test
             Environment.SetEnvironmentVariable("WeatherForecast.AuthKey", "");
 
             var configurationRetriever = new ConfigurationRetriever(null);
-            var cacheService = new CacheService();
+            var cacheService = new InMemoryCache();
             var service = new WeatherForecastRetriever(configurationRetriever, cacheService);
             var result = service.GetForecastAsync().Result;
         }

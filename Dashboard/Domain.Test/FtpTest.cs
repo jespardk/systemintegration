@@ -3,11 +3,31 @@ using Xunit;
 using Domain.PowerMeasurement;
 using Domain.Caching;
 using Domain.Configuration;
+using Infrastructure.Caching;
 
 namespace Domain.Test
 {
     public class FtpTest
     {
+        [Fact]
+        public async Task TryServiceAsync()
+        {
+            Environment.SetEnvironmentVariable("PowerMeasurements.Username", "");
+            Environment.SetEnvironmentVariable("PowerMeasurements.Password", "");
+            Environment.SetEnvironmentVariable("PowerMeasurements.Url", "");
+
+            var configurationRetriever = new ConfigurationRetriever(null);
+            var cacheService = new InMemoryCache();
+            var service = new PowerMeasurementRetriever(configurationRetriever, cacheService);
+            await service.GetMeasurementsAsync();
+        }
+
+        [Fact]
+        public void CanDecodeCsv()
+        {
+            var converted = CsvConverter.Convert<PowerMeasurementCsvSchema>(CsvExample);
+        }
+
         private string CsvExample = @"
 20211231;170002;danfoss;My Plant;+0100
 [wr_def_start]
@@ -63,24 +83,5 @@ INTERVAL;TIMESTAMP;SERIAL;P_AC;E_DAY;T_WR;U_AC;U_AC_1;U_AC_2;U_AC_3;I_AC;F_AC;U_
 60;2021-12-31 16:46:00;895541N541;0;8.248;27;231;230;233;231;0.000;49.98;208.7;0.000;27.9;0.000;85.4;0.000;50;0;0;0.000;0.000;0.000;0;0;0;49.98;49.98;49.98;0;1000;0.0;0;1.0000;0;2;8248;8248;0
 [wr_ende]
 ";
-
-        [Fact]
-        public async Task TryServiceAsync()
-        {
-            Environment.SetEnvironmentVariable("PowerMeasurements.Username", "");
-            Environment.SetEnvironmentVariable("PowerMeasurements.Password", "");
-            Environment.SetEnvironmentVariable("PowerMeasurements.Url", "");
-
-            var configurationRetriever = new ConfigurationRetriever(null);
-            var cacheService = new CacheService();
-            var service = new PowerMeasurementRetriever(configurationRetriever, cacheService);
-            await service.GetMeasurementsAsync();
-        }
-
-        [Fact]
-        public void CanDecodeCsv()
-        {
-            var converted = CsvConverter.Convert<PowerMeasurementCsvSchema>(CsvExample);
-        }
     }
 }
