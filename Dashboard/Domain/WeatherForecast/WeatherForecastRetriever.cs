@@ -6,19 +6,21 @@ namespace Domain.WeatherForecast
 {
     public class WeatherForecastRetriever
     {
-        private const string _cacheKey = "ForecastService.ForecastCache";
         private readonly ICacheService _cacheService;
-        private string _key;
+        private const string CacheKey = "WeatherForecast.ForecastCache";
+        private string? _key;
+        private string? _location = "Kolding";
 
         public WeatherForecastRetriever(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
         {
-            _key = configurationRetriever.Get("ForecastService.AuthKey") ?? string.Empty;
+            _key = configurationRetriever.Get("WeatherForecast.AuthKey");
+            _location = configurationRetriever.Get("WeatherForecast.Location");
             _cacheService = cacheService;
         }
 
         public async Task<ForecastAggregateResponse> GetForecastAsync()
         {
-            var cachedItem = _cacheService.Get<ForecastAggregateResponse>(_cacheKey);
+            var cachedItem = _cacheService.Get<ForecastAggregateResponse>(CacheKey);
             if (cachedItem != null)
             {
                 cachedItem.IsFromCache = true;
@@ -26,7 +28,7 @@ namespace Domain.WeatherForecast
             }
 
             var client = new ForecastServiceClient();
-            GetForecastResponse result = await client.GetForecastAsync("Kolding", _key);
+            GetForecastResponse result = await client.GetForecastAsync(_location, _key);
 
             var dateNowPlus12Hours = DateTime.Now.AddHours(9);
             var relevantForecastData = result.Body.GetForecastResult.location.values.Where(_ => _.datetimeStr < dateNowPlus12Hours);
@@ -53,7 +55,7 @@ namespace Domain.WeatherForecast
             }
 
             // Cache result
-            _cacheService.Set(_cacheKey, response, 120);
+            _cacheService.Set(CacheKey, response, 120);
             Console.WriteLine($"{GetType().Name}: Read data from SOAP resource");
 
             return response;

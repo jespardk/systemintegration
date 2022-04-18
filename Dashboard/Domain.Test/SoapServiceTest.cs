@@ -10,7 +10,7 @@ namespace Domain.Test
         [Fact]
         public void TryService()
         {
-            Environment.SetEnvironmentVariable("ForecastService.AuthKey", "CHANGEME!");
+            Environment.SetEnvironmentVariable("WeatherForecast.AuthKey", "");
 
             var configurationRetriever = new ConfigurationRetriever(null);
             var cacheService = new CacheService();

@@ -6,13 +6,13 @@ namespace Domain.TemperatureReporting
 {
     public class TemperatureReporter
     {
-        private const string _cacheKey = "TemperatureReportingService.Cache";
+        private const string _cacheKey = "TemperatureReporting.Cache";
         private readonly ICacheService _cacheService;
-        private string _connectionString;
+        private string? _connectionString;
 
         public TemperatureReporter(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
         {
-            _connectionString = configurationRetriever.Get("TemperatureReportingService.ConnectionString");
+            _connectionString = configurationRetriever.Get("TemperatureReporting.ConnectionString");
             _cacheService = cacheService;
         }
 

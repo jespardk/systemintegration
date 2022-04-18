@@ -67,9 +67,9 @@ INTERVAL;TIMESTAMP;SERIAL;P_AC;E_DAY;T_WR;U_AC;U_AC_1;U_AC_2;U_AC_3;I_AC;F_AC;U_
         [Fact]
         public async Task TryServiceAsync()
         {
-            Environment.SetEnvironmentVariable("PowerMeasurementsService.Username", "");
-            Environment.SetEnvironmentVariable("PowerMeasurementsService.Password", "");
-            Environment.SetEnvironmentVariable("PowerMeasurementsService.Url", "");
+            Environment.SetEnvironmentVariable("PowerMeasurements.Username", "");
+            Environment.SetEnvironmentVariable("PowerMeasurements.Password", "");
+            Environment.SetEnvironmentVariable("PowerMeasurements.Url", "");
 
             var configurationRetriever = new ConfigurationRetriever(null);
             var cacheService = new CacheService();

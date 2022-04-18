@@ -13,7 +13,7 @@ namespace Domain.DanishEnergyPrices
 
         public DanishEnergyPriceRetriever(IConfigurationRetriever configurationRetriever)
         {
-            _baseUrl = configurationRetriever.Get("DanishEnergyPrice.BaseUrl");
+            _baseUrl = configurationRetriever.Get("DanishEnergyPrice.ApiBaseUrl");
         }
 
         public async Task<DanishEnergyPriceResponse> GetDayPricesForPriceArea(DanishEnergyPriceArea area, int hoursToCollect = 24)

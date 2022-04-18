@@ -1,6 +1,5 @@
 ﻿using Domain.Configuration;
 using Common.Helpers;
-using Microsoft.Extensions.Configuration;
 using System.Net;
 using Domain.Caching;
 
@@ -8,19 +7,20 @@ namespace Domain.PowerMeasurement
 {
     public class PowerMeasurementRetriever
     {
-        private const string _cacheKey = "PowerMeasurementsService.WattsCache";
+        private const string _cacheKey = "PowerMeasurements.WattsCache";
         private string? _username;
         private string? _password;
         private string? _url;
         private ICacheService _cacheService;
 
-        public PowerMeasurementRetriever(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
+        public PowerMeasurementRetriever(IConfigurationRetriever configurationRetriever,
+                                         ICacheService cacheService)
         {
             _cacheService = cacheService;
             
-            _username = configurationRetriever.Get("PowerMeasurementsService.Username");
-            _password = configurationRetriever.Get("PowerMeasurementsService.Password");
-            _url = configurationRetriever.Get("PowerMeasurementsService.Url");
+            _username = configurationRetriever.Get("PowerMeasurements.Username");
+            _password = configurationRetriever.Get("PowerMeasurements.Password");
+            _url = configurationRetriever.Get("PowerMeasurements.Url");
         }
 
         public async Task<PowerProductionResponse> GetMeasurementsAsync()
@@ -37,8 +37,8 @@ namespace Domain.PowerMeasurement
                     return cachedItem;
                 }
 
-                var allfiles = GetSortedFileNamesForServer();
-                string selectedFile = PickFileFromOneYearAgo(allfiles);
+                var filesOverview = GetSortedFileNameList();
+                string? selectedFile = PickFileFromOneYearAgo(filesOverview);
 
                 FtpWebResponse ftpResponse = await GetFromFtpSource(selectedFile);
 
@@ -92,7 +92,7 @@ namespace Domain.PowerMeasurement
             return ftpResponse;
         }
 
-        private List<string> GetSortedFileNamesForServer()
+        private List<string> GetSortedFileNameList()
         {
             try
             {
