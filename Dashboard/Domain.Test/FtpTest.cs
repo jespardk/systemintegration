@@ -4,6 +4,7 @@ using Domain.PowerMeasurement;
 using Domain.Caching;
 using Domain.Configuration;
 using Infrastructure.Caching;
+using Infrastructure.Configuration;
 
 namespace Domain.Test
 {

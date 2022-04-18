@@ -2,6 +2,7 @@
 using Xunit;
 using Domain.DanishEnergyPrices;
 using Domain.Configuration;
+using Infrastructure.Configuration;
 
 namespace Domain.Test
 {

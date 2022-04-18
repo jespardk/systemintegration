@@ -1,6 +1,7 @@
 ﻿using Domain.Configuration;
 using Domain.WeatherForecast;
 using Infrastructure.Caching;
+using Infrastructure.Configuration;
 using Xunit;
 
 namespace Domain.Test

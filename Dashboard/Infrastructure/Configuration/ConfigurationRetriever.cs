@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Domain.Configuration;
+using Microsoft.Extensions.Configuration;
 using System.Configuration;
 
-namespace Domain.Configuration
+namespace Infrastructure.Configuration
 {
     public class ConfigurationRetriever : IConfigurationRetriever
     {

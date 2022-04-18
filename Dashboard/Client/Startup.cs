@@ -5,6 +5,7 @@ using Domain.PowerMeasurement;
 using Domain.TemperatureReporting;
 using Domain.WeatherForecast;
 using Infrastructure.Caching;
+using Infrastructure.Configuration;
 
 namespace Client
 {
