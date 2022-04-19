@@ -2,22 +2,32 @@
 using Newtonsoft.Json;
 using Domain.PowerMeasurement;
 using Domain.Configuration;
+using Domain.Caching;
 
 namespace Domain.DanishEnergyPrices
 {
     public class DanishEnergyPriceRetriever
     {
+        private string? _baseUrl;
         private const string _cacheKey = "DanishEnergyPrice.PriceCache";
         private const double CONVERSION_PRICE_DKK_TO_EUR = 7.4377;
-        private string? _baseUrl;
+        private readonly ICacheService _cacheService;
 
-        public DanishEnergyPriceRetriever(IConfigurationRetriever configurationRetriever)
+        public DanishEnergyPriceRetriever(IConfigurationRetriever configurationRetriever, ICacheService cacheService)
         {
             _baseUrl = configurationRetriever.Get("DanishEnergyPrice.ApiBaseUrl");
+            _cacheService = cacheService;
         }
 
         public async Task<DanishEnergyPriceResponse> GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea area, int hoursToCollect = 24)
         {
+            var cachedItem = _cacheService.Get<DanishEnergyPriceResponse>(_cacheKey);
+            if (cachedItem != null)
+            {
+                cachedItem.IsFromCache = true;
+                return cachedItem;
+            }
+
             var response = new DanishEnergyPriceResponse
             {
                 PriceArea = area,
@@ -42,6 +52,10 @@ namespace Domain.DanishEnergyPrices
                     .ToList();
 
                 response.RequestSuccessful = true;
+
+                // Cache result
+                _cacheService.Set(_cacheKey, response, 120);
+                Console.WriteLine($"{GetType().Name}: Read data from {response.DataSourceType} resource");
             }
             catch (Exception ex)
             {
