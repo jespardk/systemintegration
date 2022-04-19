@@ -16,7 +16,7 @@ namespace Domain.Test
             var configurationRetriever = new ConfigurationRetriever(null);
             var service = new DanishEnergyPriceRetriever(configurationRetriever);
 
-            var prices = await service.GetDayPricesForPriceArea(DanishEnergyPriceArea.DK1, 96);
+            var prices = await service.GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea.DK1, 96);
             var withPriceData = prices.RecordsWithPriceData;
         }
     }

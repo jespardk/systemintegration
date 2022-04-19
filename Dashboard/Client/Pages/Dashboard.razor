@@ -2,11 +2,13 @@
 @inject PowerMeasurementRetriever PowerMeasurementsService
 @inject WeatherForecastRetriever WeatherService
 @inject TemperatureReporter TemperatureReportingService
+@inject DanishEnergyPriceRetriever DanishEnergyPriceRetriever
 
 @code {
     private ForecastAggregateResponse? _weatherForecast;
     private PowerProductionResponse? _powerProduction;
     private TemperatureReportAggregateResponse? _temperatureReport;
+    private DanishEnergyPriceResponse? _danishEnergyPriceResponse;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -30,6 +32,9 @@
 
         _temperatureReport = TemperatureReportingService.GetTemperatureRecent();
         await InvokeAsync(() => StateHasChanged());
+
+        _danishEnergyPriceResponse = await DanishEnergyPriceRetriever.GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea.DK1);
+        await InvokeAsync(() => StateHasChanged());
     }
 }
 
@@ -45,6 +50,9 @@
     </div>
     <div class="col">
       <WeatherForecastSubview Model="_weatherForecast" />
+    </div>
+    <div class="col">
+      <DanishEnergyPricesSubview Model="_danishEnergyPriceResponse" />
     </div>
   </div>
 </div>

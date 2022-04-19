@@ -1,5 +1,6 @@
 ﻿using Domain.Caching;
 using Domain.Configuration;
+using Domain.DanishEnergyPrices;
 using Domain.KafkaBroker;
 using Domain.PowerMeasurement;
 using Domain.TemperatureReporting;
@@ -30,6 +31,7 @@ namespace Client
             services.AddTransient<WeatherForecastRetriever>();
             services.AddTransient<TemperatureReporter>();
             services.AddTransient<KafkaBroker>();
+            services.AddTransient<DanishEnergyPriceRetriever>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -16,7 +16,7 @@ namespace Domain.DanishEnergyPrices
             _baseUrl = configurationRetriever.Get("DanishEnergyPrice.ApiBaseUrl");
         }
 
-        public async Task<DanishEnergyPriceResponse> GetDayPricesForPriceArea(DanishEnergyPriceArea area, int hoursToCollect = 24)
+        public async Task<DanishEnergyPriceResponse> GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea area, int hoursToCollect = 24)
         {
             var response = new DanishEnergyPriceResponse
             {
@@ -35,7 +35,13 @@ namespace Domain.DanishEnergyPrices
                 var query = $"SELECT \"HourDK\", \"SpotPriceDKK\", \"SpotPriceEUR\" from \"elspotprices\" WHERE \"PriceArea\" = '{area}' ORDER BY \"HourDK\" DESC LIMIT {hoursToCollect}";
                 var result = await httpClient.GetStringAsync(urlSegment + query);
                 var resultAsEnergiDataServiceDkResponse = JsonConvert.DeserializeObject<Rootobject>(result);
-                response.Records = resultAsEnergiDataServiceDkResponse.result.records.Select(x => MapToDto(x)).ToList();
+
+                response.Records = resultAsEnergiDataServiceDkResponse.result.records
+                    .Select(x => MapToDto(x))
+                    .OrderBy(_ => _.HourDk)
+                    .ToList();
+
+                response.RequestSuccessful = true;
             }
             catch (Exception ex)
             {
