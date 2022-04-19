@@ -11,7 +11,7 @@ namespace Domain.Test
         [Fact]
         public async Task TryServiceAsync()
         {
-            Environment.SetEnvironmentVariable("DanishEnergyPrice.BaseUrl", "https://api.energidataservice.dk");
+            Environment.SetEnvironmentVariable("DanishEnergyPrice.ApiBaseUrl", "https://api.energidataservice.dk");
 
             var configurationRetriever = new ConfigurationRetriever(null);
             var service = new DanishEnergyPriceRetriever(configurationRetriever);

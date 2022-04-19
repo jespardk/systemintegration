@@ -18,6 +18,7 @@
     {
         public DateTime HourDK { get; set; }
         public object SpotPriceDKK { get; set; }
+        public object SpotPriceEUR { get; set; }
     }
 
     public class Field

@@ -32,7 +32,7 @@ namespace Domain.DanishEnergyPrices
                 httpClient.BaseAddress = new Uri(_baseUrl);
 
                 var urlSegment = $"datastore_search_sql?sql=";
-                var query = $"SELECT \"HourDK\", \"SpotPriceDKK\" from \"elspotprices\" WHERE \"PriceArea\" = '{area}' ORDER BY \"HourDK\" DESC LIMIT {hoursToCollect}";
+                var query = $"SELECT \"HourDK\", \"SpotPriceDKK\", \"SpotPriceEUR\" from \"elspotprices\" WHERE \"PriceArea\" = '{area}' ORDER BY \"HourDK\" DESC LIMIT {hoursToCollect}";
                 var result = await httpClient.GetStringAsync(urlSegment + query);
                 var resultAsEnergiDataServiceDkResponse = JsonConvert.DeserializeObject<Rootobject>(result);
                 response.Records = resultAsEnergiDataServiceDkResponse.result.records.Select(x => MapToDto(x)).ToList();
@@ -47,7 +47,16 @@ namespace Domain.DanishEnergyPrices
 
         private static DanishEnergyPriceRecordResponse MapToDto(Record x)
         {
-            double? price = x.SpotPriceDKK == null ? null : (double)x.SpotPriceDKK;
+            double? price = x.SpotPriceDKK != null 
+                ? (double)x.SpotPriceDKK 
+                : null;
+
+            if (price == null && x.SpotPriceEUR != null)
+            {
+                // In case only EUR price is available, convert this to danish
+                price = (double)x.SpotPriceEUR * CONVERSION_PRICE_DKK_TO_EUR;
+            }
+
             var dto = new DanishEnergyPriceRecordResponse
             {
                 HourDk = x.HourDK,
