@@ -62,7 +62,7 @@ namespace Domain.DanishEnergyPrices
                 HourDk = x.HourDK,
                 SpotPriceMegawattInDKK = price.HasValue ? Math.Round(price.Value, 3) : null,
                 SpotPriceKilowattInDKK = price.HasValue ? Math.Round(price.Value / 1000, 3) : null,
-                SpotPriceMegawattInEUR = price.HasValue ? Math.Round(price.Value / DanishEnergyPriceRetriever.CONVERSION_PRICE_DKK_TO_EUR, 3) : null,
+                SpotPriceMegawattInEUR = price.HasValue ? Math.Round(price.Value / CONVERSION_PRICE_DKK_TO_EUR, 3) : null,
                 SpotPriceKilowattInEUR = price.HasValue ? Math.Round((price.Value / 1000) / CONVERSION_PRICE_DKK_TO_EUR, 3) : null
             };
 
