@@ -24,35 +24,51 @@
 
     private async Task LoadData()
     {
-        _weatherForecast = await WeatherService.GetForecastAsync();
-        await InvokeAsync(() => StateHasChanged());
+        // Fetch data sources in parallel
 
-        _powerProduction = await PowerMeasurementsService.GetMeasurementsAsync();
-        await InvokeAsync(() => StateHasChanged());
+        List<Task> tasks = new();
 
-        _temperatureReport = TemperatureReportingService.GetTemperatureRecent();
-        await InvokeAsync(() => StateHasChanged());
+        tasks.Add(Task.Run(async () =>
+        {
+            _weatherForecast = await WeatherService.GetForecastAsync();
+            await InvokeAsync(() => StateHasChanged());
+        }));
 
-        _danishEnergyPriceResponse = await DanishEnergyPriceRetriever.GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea.DK1);
-        await InvokeAsync(() => StateHasChanged());
+        tasks.Add(Task.Run(async () =>
+        {
+            _powerProduction = await PowerMeasurementsService.GetMeasurementsAsync();
+            await InvokeAsync(() => StateHasChanged());
+        }));
+
+        tasks.Add(Task.Run(async () =>
+        {
+            _temperatureReport = TemperatureReportingService.GetTemperatureRecent();
+            await InvokeAsync(() => StateHasChanged());
+        }));
+
+        tasks.Add(Task.Run(async () =>
+        {
+            _danishEnergyPriceResponse = await DanishEnergyPriceRetriever.GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea.DK1);
+            await InvokeAsync(() => StateHasChanged());
+        }));
     }
 }
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="col">
-      <PowerProductionSubview Model="_powerProduction" />
+    <div class="row">
+        <div class="col">
+            <PowerProductionSubview Model="_powerProduction" />
+        </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <TemperatureReportSubview Model="_temperatureReport" />
+    <div class="row">
+        <div class="col">
+            <TemperatureReportSubview Model="_temperatureReport" />
+        </div>
+        <div class="col">
+            <WeatherForecastSubview Model="_weatherForecast" />
+        </div>
+        <div class="col">
+            <DanishEnergyPricesSubview Model="_danishEnergyPriceResponse" />
+        </div>
     </div>
-    <div class="col">
-      <WeatherForecastSubview Model="_weatherForecast" />
-    </div>
-    <div class="col">
-      <DanishEnergyPricesSubview Model="_danishEnergyPriceResponse" />
-    </div>
-  </div>
 </div>

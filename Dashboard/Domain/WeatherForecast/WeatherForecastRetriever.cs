@@ -39,7 +39,11 @@ namespace Domain.WeatherForecast
 
                 GetForecastResponse result = null;
 
-                var retryPolicy = GenericRetryingPolicy.Get(GetType().Name, 3);
+                var retryPolicy = new RetryingPolicyBuilder<WeatherForecastRetriever>()
+                    .WithDelay(3)
+                    .WithRetries(3)
+                    .Build();
+
                 await retryPolicy.ExecuteAsync(async () => 
                 {
                     result = await _client.GetForecastAsync(_location, _key);
