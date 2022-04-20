@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Domain.PowerMeasurement;
 using Domain.Configuration;
 using Domain.Caching;
+using Common.ResiliencyPolicies;
 
 namespace Domain.DanishEnergyPrices
 {
@@ -43,7 +44,18 @@ namespace Domain.DanishEnergyPrices
 
                 var urlSegment = $"datastore_search_sql?sql=";
                 var query = $"SELECT \"HourDK\", \"SpotPriceDKK\", \"SpotPriceEUR\" from \"elspotprices\" WHERE \"PriceArea\" = '{area}' ORDER BY \"HourDK\" DESC LIMIT {hoursToCollect}";
-                var result = await httpClient.GetStringAsync(urlSegment + query);
+
+                var retryPolicy = new RetryingPolicyBuilder<DanishEnergyPriceRetriever>()
+                    .WithDelay(3)
+                    .WithRetries(3)
+                    .Build();
+
+                string? result = null;
+                await retryPolicy.ExecuteAsync(async () =>
+                {
+                    result = await httpClient.GetStringAsync(urlSegment + query);
+                });
+
                 var resultAsEnergiDataServiceDkResponse = JsonConvert.DeserializeObject<Rootobject>(result);
 
                 response.Records = resultAsEnergiDataServiceDkResponse.result.records
