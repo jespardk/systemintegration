@@ -32,3 +32,8 @@ WSL: Ensure Docker daemon is running
 WSL: Ensure Kafka broker is running
   - Must have a docker-compose.yaml file present - see `devops/KafkaBroker/` -  and must have docker running.
   - Run: `sudo docker-compose up`
+
+
+## Data sources
+- Energidataservice.dk
+  - https://www.energidataservice.dk/tso-electricity/elspotprices
