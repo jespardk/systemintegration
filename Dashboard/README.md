@@ -37,7 +37,6 @@ WSL: Ensure Kafka broker is running
 ## Data sources
 - Energidataservice.dk
   - https://www.energidataservice.dk/tso-electricity/elspotprices
-  - Run: `sudo docker-compose up`
 
 
 ## Flow of testing that the energy price flow works
