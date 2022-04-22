@@ -34,6 +34,12 @@ WSL: Ensure Kafka broker is running
   - Run: `sudo docker-compose up`
 
 
+## Data sources
+- Energidataservice.dk
+  - https://www.energidataservice.dk/tso-electricity/elspotprices
+  - Run: `sudo docker-compose up`
+
+
 ## Flow of testing that the energy price flow works
 
 1) Go to the Dashboard page. Initially the tile for energy prices on the right will now have no data - because nothing has been recieved yet and stored in the cache
