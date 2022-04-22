@@ -32,3 +32,11 @@ WSL: Ensure Docker daemon is running
 WSL: Ensure Kafka broker is running
   - Must have a docker-compose.yaml file present - see `devops/KafkaBroker/` -  and must have docker running.
   - Run: `sudo docker-compose up`
+
+
+## Flow of testing that the energy price flow works
+
+1) Go to the Dashboard page. Initially the tile for energy prices on the right will now have no data - because nothing has been recieved yet and stored in the cache
+2) Go to the Livedata page. Click `Process: Fetch energy prices, queue message, receieve and cache for use on dashboard`. This will set the following in motion.
+  - When loading this view, a DanishEnergyPriceIncomingHandler is already listening for new messages. If it receieves one that is exactly the format it expects (i.e. `DanishEnergyPriceResponse`), it will cache this, so the system can now use it.
+3) Go to the Dashboard page again. This time, energy prices will have data.

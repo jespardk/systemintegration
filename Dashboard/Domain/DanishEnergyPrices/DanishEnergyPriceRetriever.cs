@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Domain.PowerMeasurement;
+﻿using Newtonsoft.Json;
 using Domain.Configuration;
 using Domain.Caching;
 using Common.ResiliencyPolicies;
@@ -9,6 +7,8 @@ namespace Domain.DanishEnergyPrices
 {
     public class DanishEnergyPriceRetriever
     {
+        public const string CacheKeyAllDay = "DanishEnergyPrice.PriceCacheAllDay";
+
         private string? _baseUrl;
         private const string _cacheKey = "DanishEnergyPrice.PriceCache";
         private const double CONVERSION_PRICE_DKK_TO_EUR = 7.4377;
@@ -18,6 +18,24 @@ namespace Domain.DanishEnergyPrices
         {
             _baseUrl = configurationRetriever.Get("DanishEnergyPrice.ApiBaseUrl");
             _cacheService = cacheService;
+        }
+
+        public DanishEnergyPriceResponse GetDayPricesForPriceAreaFromDayCacheAsync(DanishEnergyPriceArea area)
+        {
+            var cachedItem = _cacheService.Get<DanishEnergyPriceResponse>(CacheKeyAllDay);
+            if (cachedItem != null)
+            {
+                cachedItem.IsFromCache = true;
+                return cachedItem;
+            }
+
+            var emptyResponse = new DanishEnergyPriceResponse
+            {
+                IsFromCache = false,
+                RequestSuccessful = true
+            };
+
+            return emptyResponse;
         }
 
         public async Task<DanishEnergyPriceResponse> GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea area, int hoursToCollect = 24)
@@ -59,7 +77,7 @@ namespace Domain.DanishEnergyPrices
                 var resultAsEnergiDataServiceDkResponse = JsonConvert.DeserializeObject<Rootobject>(result);
 
                 response.Records = resultAsEnergiDataServiceDkResponse.result.records
-                    .Select(x => MapToDto(x))
+                    .Select(MapToDto)
                     .OrderBy(_ => _.HourDk)
                     .ToList();
 

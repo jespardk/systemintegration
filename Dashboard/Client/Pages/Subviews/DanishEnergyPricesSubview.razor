@@ -43,7 +43,9 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.RecordsWithPriceData)
+            @if (Model != null && Model.RecordsWithPriceData != null)
+            {
+                         @foreach (var item in Model.RecordsWithPriceData)
             {
                 <tr>
                     <td>
@@ -56,6 +58,7 @@ else
                         @item.SpotPriceMegawattInEUR
                     </td>
                 </tr>
+            }   
             }
         </tbody>
     </table>

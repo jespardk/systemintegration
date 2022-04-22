@@ -1,5 +1,8 @@
 ﻿@page "/livedata"
+@using Newtonsoft.Json
 @inject KafkaBroker KafkaService
+@inject DanishEnergyPriceRetriever DanishEnergyPriceRetriever
+@inject DanishEnergyPriceIncomingHandler EnergyPriceIncomingHandler
 
 @code {
     private string queueName = "quickstart";
@@ -24,6 +27,7 @@
         Task task = Task.Run(() =>
         {
             KafkaService.MessageArrived += OnMessageArrive;
+            KafkaService.MessageArrived += EnergyPriceIncomingHandler.OnNewPricesReceived;
             KafkaService.BeginConsuming(queueName);
         });
 
@@ -33,6 +37,12 @@
     private async Task ProduceSample()
     {
         await KafkaService.Produce(queueName, messageContent);
+    }
+
+    private async Task FetchPricesAndProduce()
+    {
+        var prices = await DanishEnergyPriceRetriever.GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea.DK1, 24);
+        await KafkaService.Produce(queueName, JsonConvert.SerializeObject(prices));
     }
 
     private void StopConsumer()
@@ -53,6 +63,9 @@
         <div class="col">
             <button type="button" class="btn btn-secondary" @onclick="ProduceSample">Produce a sample message</button>
             <input name="theMessage" @bind="messageContent" />
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-secondary" @onclick="FetchPricesAndProduce">Process: Fetch energy prices, queue message, receieve and cache for use on dashboard</button>
         </div>
         <div class="col">
             <button type="button" class="btn btn-secondary" @onclick="StopConsumer">Stop consumer</button>

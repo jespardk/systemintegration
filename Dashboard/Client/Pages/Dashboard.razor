@@ -48,7 +48,7 @@
 
         tasks.Add(Task.Run(async () =>
         {
-            _danishEnergyPriceResponse = await DanishEnergyPriceRetriever.GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea.DK1);
+            _danishEnergyPriceResponse = DanishEnergyPriceRetriever.GetDayPricesForPriceAreaFromDayCacheAsync(DanishEnergyPriceArea.DK1);
             await InvokeAsync(() => StateHasChanged());
         }));
     }

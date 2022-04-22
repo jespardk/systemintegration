@@ -6,7 +6,7 @@ namespace Domain.DanishEnergyPrices
     {
         public DanishEnergyPriceArea PriceArea { get; set; }
         public List<DanishEnergyPriceRecordResponse> Records { get; set; }
-        public List<DanishEnergyPriceRecordResponse> RecordsWithPriceData => Records.Where(_ => _.HasPriceData).ToList();
+        public List<DanishEnergyPriceRecordResponse> RecordsWithPriceData => Records?.Where(_ => _.HasPriceData)?.ToList();
 
         public int HourSpan { get; set; }
     }

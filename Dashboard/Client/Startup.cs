@@ -32,6 +32,7 @@ namespace Client
             services.AddTransient<TemperatureReporter>();
             services.AddTransient<KafkaBroker>();
             services.AddTransient<DanishEnergyPriceRetriever>();
+            services.AddTransient<DanishEnergyPriceIncomingHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
