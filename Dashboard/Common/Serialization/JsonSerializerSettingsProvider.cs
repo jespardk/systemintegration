@@ -2,7 +2,7 @@
 
 namespace Common.Serialization
 {
-    public class JsonSerializerSettingsStore
+    public class JsonSerializerSettingsProvider
     {
         public static Newtonsoft.Json.JsonSerializerSettings WithSilentErrorHandling()
         {

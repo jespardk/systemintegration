@@ -21,7 +21,7 @@ namespace Domain.DanishEnergyPrices
 
             try
             {
-                var converted = JsonConvert.DeserializeObject<DanishEnergyPriceResponse>(message, JsonSerializerSettingsStore.WithSilentErrorHandling());
+                var converted = JsonConvert.DeserializeObject<DanishEnergyPriceResponse>(message, JsonSerializerSettingsProvider.WithSilentErrorHandling());
 
                 if (converted != null /*&& converted.DateTime.Date != today*/)
                 {
