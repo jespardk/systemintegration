@@ -12,6 +12,7 @@
 2. Setup configuration
    - Create a copy of the file `appsettings.Sample.json`, ensure the name is precisely = `appsettings.Secrets.json`.
    - Fill out the secrets in file.
+   - Also ensure Kafka IP address is correct in the setting `KafkaProvider.BootstrapServers` (this changes every time WSL/PC is rebooted).
 5. Run this command: `dotnet watch run`. 
    - This should start a browser window with the blazor Dashboard application.
    - If it doesn't, try http://localhost:5000/dashboard/ instead
