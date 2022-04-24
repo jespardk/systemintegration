@@ -1,4 +1,5 @@
-﻿using Domain.Caching;
+﻿using Common.Serialization;
+using Domain.Caching;
 using Newtonsoft.Json;
 
 namespace Domain.DanishEnergyPrices
@@ -20,17 +21,22 @@ namespace Domain.DanishEnergyPrices
 
             try
             {
-                var converted = JsonConvert.DeserializeObject<DanishEnergyPriceResponse>(message);
+                var converted = JsonConvert.DeserializeObject<DanishEnergyPriceResponse>(message, JsonSerializerSettingsStore.WithSilentErrorHandling());
+
                 if (converted != null /*&& converted.DateTime.Date != today*/)
                 {
                     // Cache prices
                     _cacheService.Set(DanishEnergyPriceRetriever.CacheKeyAllDay, converted, DayInSeconds);
                     Console.WriteLine($"{nameof(IncomingDanishEnergyPriceHandler)}: Stored in cache! Try the dashboard again");
                 }
+                else
+                {
+                    Console.WriteLine($"{nameof(IncomingDanishEnergyPriceHandler)}: Ignoring unrecognized format...");
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine($"{nameof(IncomingDanishEnergyPriceHandler)}: Could not recognize incoming format - ignoring.");
+                Console.WriteLine($"{nameof(IncomingDanishEnergyPriceHandler)}: Error: " + ex.Message);
             }
         }
     }
