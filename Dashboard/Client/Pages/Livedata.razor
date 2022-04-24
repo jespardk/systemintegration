@@ -1,8 +1,8 @@
 ﻿@page "/livedata"
 @using Newtonsoft.Json
-@inject KafkaBroker KafkaService
-@inject DanishEnergyPriceRetriever DanishEnergyPriceRetriever
-@inject DanishEnergyPriceIncomingHandler EnergyPriceIncomingHandler
+@inject KafkaBroker _kafkaService
+@inject DanishEnergyPriceRetriever _danishEnergyPriceRetriever
+@inject IncomingDanishEnergyPriceHandler _incomingDanishEnergyPriceHandler
 
 @code {
     private string queueName = "quickstart";
@@ -26,9 +26,8 @@
         // start listening for messages
         Task task = Task.Run(() =>
         {
-            KafkaService.MessageArrived += OnMessageArrive;
-            KafkaService.MessageArrived += EnergyPriceIncomingHandler.OnNewPricesReceived;
-            KafkaService.BeginConsuming(queueName);
+            Client.Middleware.KafkaBrokerMiddleware.KafkabrokerInstance.MessageArrived += OnMessageArriveInUI;
+            //Client.Middleware.KafkaBrokerMiddleware.KafkabrokerInstance.MessageArrived += _incomingDanishEnergyPriceHandler.OnNewPricesReceived;
         });
 
         await InvokeAsync(() => StateHasChanged());
@@ -36,21 +35,21 @@
 
     private async Task ProduceSample()
     {
-        await KafkaService.Produce(queueName, messageContent);
+        await _kafkaService.Produce(queueName, messageContent);
     }
 
     private async Task FetchPricesAndProduce()
     {
-        var prices = await DanishEnergyPriceRetriever.GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea.DK1, 24);
-        await KafkaService.Produce(queueName, JsonConvert.SerializeObject(prices));
+        var prices = await _danishEnergyPriceRetriever.GetDayPricesForPriceAreaAsync(DanishEnergyPriceArea.DK1, 24);
+        await _kafkaService.Produce(queueName, JsonConvert.SerializeObject(prices));
     }
 
     private void StopConsumer()
     {
-        KafkaService.StopConsuming();
+        _kafkaService.StopConsuming();
     }
 
-    private void OnMessageArrive(string message)
+    private void OnMessageArriveInUI(string message)
     {
         ArrivedMessages.Add(new LiveViewItemViewModel { DateTime = DateTime.Now, Message = message });
         ArrivedMessages = ArrivedMessages.OrderByDescending(x => x.DateTime).ToList();

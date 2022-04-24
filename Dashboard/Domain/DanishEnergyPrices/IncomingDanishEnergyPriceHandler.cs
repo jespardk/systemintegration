@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 
 namespace Domain.DanishEnergyPrices
 {
-    public class DanishEnergyPriceIncomingHandler
+    public class IncomingDanishEnergyPriceHandler
     {
         private readonly ICacheService _cacheService;
 
-        public DanishEnergyPriceIncomingHandler(ICacheService cacheService)
+        public IncomingDanishEnergyPriceHandler(ICacheService cacheService)
         {
             _cacheService = cacheService;
         }

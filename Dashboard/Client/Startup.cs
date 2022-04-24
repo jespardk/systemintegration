@@ -1,4 +1,5 @@
-﻿using Domain.Caching;
+﻿using Client.Middleware;
+using Domain.Caching;
 using Domain.Configuration;
 using Domain.DanishEnergyPrices;
 using Domain.KafkaBroker;
@@ -25,14 +26,16 @@ namespace Client
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
             services.AddSingleton<ICacheService, InMemoryCache>();
             services.AddSingleton<IConfigurationRetriever, ConfigurationRetriever>();
+            services.AddSingleton<KafkaBroker>();
+
             services.AddTransient<PowerMeasurementRetriever>();
             services.AddTransient<WeatherForecastRetriever>();
             services.AddTransient<TemperatureReporter>();
-            services.AddTransient<KafkaBroker>();
             services.AddTransient<DanishEnergyPriceRetriever>();
-            services.AddTransient<DanishEnergyPriceIncomingHandler>();
+            services.AddTransient<IncomingDanishEnergyPriceHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +62,9 @@ namespace Client
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            app.BootKafkaConsumer();
+            app.StartSubscriptions();
         }
     }
 }

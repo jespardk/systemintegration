@@ -10,6 +10,7 @@ namespace Domain.KafkaBroker
         private ProducerConfig _producerConfig;
         private ConsumerConfig _consumerConfig;
         private CancellationTokenSource _consumerCancellationToken;
+        private IConsumer<string, string> _consumer;
 
         public event Action<string> MessageArrived;
 
@@ -37,50 +38,57 @@ namespace Domain.KafkaBroker
 
         public async Task<bool> Produce(string topic, string message)
         {
-            using (var producer = new ProducerBuilder<Null, string>(_producerConfig).Build())
+            try
             {
-                var produceResult = await producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
+                using (var producer = new ProducerBuilder<Null, string>(_producerConfig).Build())
+                {
+                    var produceResult = await producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
 
-                var wasPersisted = produceResult.Status == PersistenceStatus.Persisted;
-                Console.WriteLine("Persist OK for Kafka");
+                    var wasPersisted = produceResult.Status == PersistenceStatus.Persisted;
+                    Console.WriteLine("Persist OK for Kafka");
 
-                return wasPersisted;
+                    return wasPersisted;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Kafka error: " + ex.Message);
+                return false;
             }
         }
 
-        public void BeginConsuming(string topic)
+        public void StartConsumer(string topic)
         {
-            Console.WriteLine($"Starting consumer to listen...");
-            _consumerCancellationToken = new CancellationTokenSource();
-
-            using (var consumer = new ConsumerBuilder<string, string>(_consumerConfig).Build())
+            try
             {
-                consumer.Subscribe(topic);
+                Console.WriteLine($"Starting consumer to listen...");
+                _consumerCancellationToken = new CancellationTokenSource();
+
+                _consumer = new ConsumerBuilder<string, string>(_consumerConfig).Build();
+                _consumer.Subscribe(topic);
 
                 Console.WriteLine($"Consumer ready");
 
-                try
+                while (true)
                 {
-                    while (true)
-                    {
-                        var cr = consumer.Consume(_consumerCancellationToken.Token);
-                        Console.WriteLine($"[Message receieved] {cr.Value}");
-                        MessageArrived(cr.Value);
-                    }
+                    var cr = _consumer.Consume(_consumerCancellationToken.Token);
+                    Console.WriteLine($"[Message receieved] {cr.Value}");
+                    MessageArrived(cr.Value);
                 }
-                catch (OperationCanceledException)
-                {
-                }
-                finally
-                {
-                    consumer.Close();
-                    Console.WriteLine($"Consumer stopped.");
-                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            finally
+            {
+                _consumer.Close();
+                Console.WriteLine($"Consumer stopped.");
             }
         }
 
         public void StopConsuming()
         {
+            _consumer.Close();
             _consumerCancellationToken.Cancel();
             Console.WriteLine($"Cancelling consumer...");
         }
