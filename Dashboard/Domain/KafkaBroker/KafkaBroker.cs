@@ -72,7 +72,11 @@ namespace Domain.KafkaBroker
                 while (true)
                 {
                     var cr = _consumer.Consume(_consumerCancellationToken.Token);
-                    Console.WriteLine($"[Message receieved] {cr.Value}");
+
+                    var lastIndex = cr.Value.Length > 30 ? 30 : cr.Value.Length;
+
+                    Console.WriteLine($"[Message receieved] {cr.Value.Substring(0, lastIndex)}" + (cr.Value.Length >= 30 ? " (Truncated)" : ""));
+
                     MessageArrived(cr.Value);
                 }
             }
