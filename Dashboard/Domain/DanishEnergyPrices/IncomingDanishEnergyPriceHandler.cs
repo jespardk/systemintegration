@@ -25,12 +25,12 @@ namespace Domain.DanishEnergyPrices
                 {
                     // Cache prices
                     _cacheService.Set(DanishEnergyPriceRetriever.CacheKeyAllDay, converted, DayInSeconds);
-                    Console.WriteLine("Stored energyprices in cache! Try the dashboard again");
+                    Console.WriteLine($"{nameof(IncomingDanishEnergyPriceHandler)}: Stored in cache! Try the dashboard again");
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine("Error deserializing...");
+                Console.WriteLine($"{nameof(IncomingDanishEnergyPriceHandler)}: Could not recognize incoming format - ignoring.");
             }
         }
     }
