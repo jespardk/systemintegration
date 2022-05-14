@@ -3,6 +3,7 @@ using Domain.Configuration;
 using Domain.Caching;
 using Common.ResiliencyPolicies;
 using Domain.DanishEnergyPrices.EnergiDataServiceApi;
+using Common.Serialization;
 
 namespace Domain.DanishEnergyPrices
 {
@@ -21,7 +22,7 @@ namespace Domain.DanishEnergyPrices
             _cacheService = cacheService;
         }
 
-        public DanishEnergyPriceResponse GetDayPricesForPriceAreaFromDayCacheAsync(DanishEnergyPriceArea area)
+        public DanishEnergyPriceResponse GetPricesFromDayCacheAsync()
         {
             var cachedItem = _cacheService.Get<DanishEnergyPriceResponse>(CacheKeyAllDay);
             if (cachedItem != null)
@@ -75,18 +76,20 @@ namespace Domain.DanishEnergyPrices
                     result = await httpClient.GetStringAsync(urlSegment + query);
                 });
 
-                var resultAsEnergiDataServiceDkResponse = JsonConvert.DeserializeObject<Rootobject>(result);
+                var resultAsEnergiDataServiceDkResponse = JsonConvert.DeserializeObject<Rootobject>(result, JsonSerializerSettingsProvider.WithSilentErrorHandling());
+                if (resultAsEnergiDataServiceDkResponse != null)
+                {
+                    response.Records = resultAsEnergiDataServiceDkResponse.result.records
+                        .Select(MapToDto)
+                        .OrderBy(_ => _.HourDk)
+                        .ToList();
 
-                response.Records = resultAsEnergiDataServiceDkResponse.result.records
-                    .Select(MapToDto)
-                    .OrderBy(_ => _.HourDk)
-                    .ToList();
+                    response.RequestSuccessful = true;
 
-                response.RequestSuccessful = true;
-
-                // Cache result
-                _cacheService.Set(_cacheKey, response, 120);
-                Console.WriteLine($"{GetType().Name}: Read data from {response.DataSourceType} resource");
+                    // Cache result
+                    _cacheService.Set(_cacheKey, response, 120);
+                    Console.WriteLine($"{GetType().Name}: Read data from {response.DataSourceType} resource");
+                }
             }
             catch (Exception ex)
             {
@@ -98,8 +101,8 @@ namespace Domain.DanishEnergyPrices
 
         private static DanishEnergyPriceRecord MapToDto(Record x)
         {
-            double? price = x.SpotPriceDKK != null 
-                ? (double)x.SpotPriceDKK 
+            double? price = x.SpotPriceDKK != null
+                ? (double)x.SpotPriceDKK
                 : null;
 
             if (price == null && x.SpotPriceEUR != null)

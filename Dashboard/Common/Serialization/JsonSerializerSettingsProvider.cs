@@ -4,9 +4,9 @@ namespace Common.Serialization
 {
     public class JsonSerializerSettingsProvider
     {
-        public static Newtonsoft.Json.JsonSerializerSettings WithSilentErrorHandling()
+        public static JsonSerializerSettings WithSilentErrorHandling()
         {
-            var settings = new Newtonsoft.Json.JsonSerializerSettings
+            var settings = new JsonSerializerSettings
             {
                 Error = (sender, args) => { args.ErrorContext.Handled = true; }
             };
