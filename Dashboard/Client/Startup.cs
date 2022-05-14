@@ -30,12 +30,12 @@ namespace Client
             services.AddSingleton<ICacheService, InMemoryCache>();
             services.AddSingleton<IConfigurationRetriever, ConfigurationRetriever>();
             services.AddSingleton<KafkaBroker>();
+            services.AddSingleton<IncomingDanishEnergyPriceHandler>();
 
             services.AddTransient<PowerMeasurementRetriever>();
             services.AddTransient<WeatherForecastRetriever>();
             services.AddTransient<TemperatureReporter>();
             services.AddTransient<DanishEnergyPriceRetriever>();
-            services.AddTransient<IncomingDanishEnergyPriceHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

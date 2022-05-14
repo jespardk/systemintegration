@@ -5,6 +5,7 @@ using Domain.Caching;
 using Domain.Configuration;
 using Infrastructure.Caching;
 using Infrastructure.Configuration;
+using Domain.PowerMeasurement.FtpCsvFile;
 
 namespace Domain.Test
 {

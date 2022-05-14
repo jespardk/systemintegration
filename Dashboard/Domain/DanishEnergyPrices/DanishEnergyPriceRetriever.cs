@@ -2,6 +2,7 @@
 using Domain.Configuration;
 using Domain.Caching;
 using Common.ResiliencyPolicies;
+using Domain.DanishEnergyPrices.EnergiDataServiceApi;
 
 namespace Domain.DanishEnergyPrices
 {
@@ -51,7 +52,7 @@ namespace Domain.DanishEnergyPrices
             {
                 PriceArea = area,
                 HourSpan = hoursToCollect,
-                Records = new List<DanishEnergyPriceRecordResponse>(),
+                Records = new List<DanishEnergyPriceRecord>(),
                 DataSourceType = "WebApi (REST)"
             };
 
@@ -95,7 +96,7 @@ namespace Domain.DanishEnergyPrices
             return response;
         }
 
-        private static DanishEnergyPriceRecordResponse MapToDto(Record x)
+        private static DanishEnergyPriceRecord MapToDto(Record x)
         {
             double? price = x.SpotPriceDKK != null 
                 ? (double)x.SpotPriceDKK 
@@ -107,7 +108,7 @@ namespace Domain.DanishEnergyPrices
                 price = (double)x.SpotPriceEUR * CONVERSION_PRICE_DKK_TO_EUR;
             }
 
-            var dto = new DanishEnergyPriceRecordResponse
+            var dto = new DanishEnergyPriceRecord
             {
                 HourDk = x.HourDK,
                 SpotPriceMegawattInDKK = price.HasValue ? Math.Round(price.Value, 3) : null,

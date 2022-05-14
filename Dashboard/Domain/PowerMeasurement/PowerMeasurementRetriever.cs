@@ -2,6 +2,7 @@
 using Common.Helpers;
 using System.Net;
 using Domain.Caching;
+using Domain.PowerMeasurement.FtpCsvFile;
 
 namespace Domain.PowerMeasurement
 {

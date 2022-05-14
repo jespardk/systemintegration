@@ -1,4 +1,4 @@
-﻿namespace Domain.PowerMeasurement
+﻿namespace Domain.PowerMeasurement.FtpCsvFile
 {
     public class PowerMeasurementCsvSchema
     {
