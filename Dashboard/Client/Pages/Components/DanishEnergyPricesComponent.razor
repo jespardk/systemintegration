@@ -45,20 +45,20 @@ else
         <tbody>
             @if (Model != null && Model.RecordsWithPriceData != null)
             {
-                         @foreach (var item in Model.RecordsWithPriceData)
-            {
-                <tr>
-                    <td>
-                        @item.HourDk
-                    </td>
-                    <td>
-                        @item.SpotPriceMegawattInDKK
-                    </td>
-                    <td>
-                        @item.SpotPriceMegawattInEUR
-                    </td>
-                </tr>
-            }   
+                foreach (var item in Model.RecordsWithPriceData)
+                {
+                    <tr>
+                        <td>
+                            @item.HourDk
+                        </td>
+                        <td>
+                            @item.SpotPriceMegawattInDKK
+                        </td>
+                        <td>
+                            @item.SpotPriceMegawattInEUR
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

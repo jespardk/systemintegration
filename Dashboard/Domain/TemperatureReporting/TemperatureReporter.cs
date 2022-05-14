@@ -58,6 +58,8 @@ namespace Domain.TemperatureReporting
                     response.Data.Add(item);
                 }
 
+                response.RequestSuccessful = true;
+
                 // Cache result
                 _cacheService.Set(_cacheKey, response, 60);
                 Console.WriteLine($"{GetType().Name}: Read data from SQL source");
