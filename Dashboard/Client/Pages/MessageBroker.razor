@@ -1,4 +1,4 @@
-﻿@page "/livedata"
+﻿@page "/messagebroker"
 @using Newtonsoft.Json
 @inject KafkaBroker _kafkaService
 @inject DanishEnergyPriceRetriever _danishEnergyPriceRetriever
@@ -27,7 +27,6 @@
         Task task = Task.Run(() =>
         {
             Client.Middleware.KafkaBrokerMiddleware.KafkabrokerInstance.MessageArrived += OnMessageArriveInUI;
-            //Client.Middleware.KafkaBrokerMiddleware.KafkabrokerInstance.MessageArrived += _incomingDanishEnergyPriceHandler.OnNewPricesReceived;
         });
 
         await InvokeAsync(() => StateHasChanged());

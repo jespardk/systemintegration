@@ -1,10 +1,10 @@
 ﻿@code {
     [Parameter]
-    public ForecastAggregateResponse Model { get; set; }
+    public DanishEnergyPriceResponse Model { get; set; }
 }
 
 <h1>
-    Weather forecast
+    Danish energy prices
     @if (Model != null && Model.IsFromCache)
     {
         <em style="font-size: 30%; text-transform:uppercase; vertical-align: super; color: #3b64dd;">Cached</em>
@@ -13,7 +13,7 @@
 
 @if (Model == null)
 {
-    <Loader />
+    <LoaderComponent />
 }
 else if (Model.RequestSuccessful == false)
 {
@@ -26,7 +26,7 @@ else
     <div class="card bg-light mb-3">
         <div class="card-body">
             <p class="card-text">
-                <strong>Location:</strong> @Model.LocationName<br>
+                <strong>PriceArea:</strong> @Model.PriceArea<br>
                 <strong>Fetch time:</strong> @Model.DateTime <br>
                 <strong>Data source:</strong> @Model.DataSourceType
             </p>
@@ -38,28 +38,27 @@ else
         <thead>
             <tr>
                 <th>Hour</th>
-                <th>Degrees (C)</th>
-                <th>Cloud cover</th>
-                <th>Wind speed (m/s)</th>
+                <th>SpotPrice (Megawatt, DKK)</th>
+                <th>SpotPrice (Megawatt, EUR)</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Data)
+            @if (Model != null && Model.RecordsWithPriceData != null)
+            {
+                         @foreach (var item in Model.RecordsWithPriceData)
             {
                 <tr>
                     <td>
-                        @item.Hour
+                        @item.HourDk
                     </td>
                     <td>
-                        @item.DegreesCelsius &deg;C
+                        @item.SpotPriceMegawattInDKK
                     </td>
                     <td>
-                        @item.CloudCover
-                    </td>
-                    <td>
-                        @item.WindSpeedMeterPrSecond
+                        @item.SpotPriceMegawattInEUR
                     </td>
                 </tr>
+            }   
             }
         </tbody>
     </table>

@@ -14,9 +14,9 @@
     {
         if (firstRender)
         {
-            // Ensure this is only triggered on first load - not every time the view is rerendered
+            // Ensure this is only triggered on first load - not every time the view/DOM is rerendered
             await LoadData();
-            Console.WriteLine("First render OK");
+            Console.WriteLine("Initial view render OK");
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -54,21 +54,23 @@
     }
 }
 
+<!-- Data is then passed on to "Dumb" components, that will render the data with the inputted datas -->
+
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <PowerProductionSubview Model="_powerProduction" />
+            <PowerProductionComponent Model="_powerProduction" />
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <TemperatureReportSubview Model="_temperatureReport" />
+            <TemperatureReportComponent Model="_temperatureReport" />
         </div>
         <div class="col">
-            <WeatherForecastSubview Model="_weatherForecast" />
+            <WeatherForecastComponent Model="_weatherForecast" />
         </div>
         <div class="col">
-            <DanishEnergyPricesSubview Model="_danishEnergyPriceResponse" />
+            <DanishEnergyPricesComponent Model="_danishEnergyPriceResponse" />
         </div>
     </div>
 </div>
